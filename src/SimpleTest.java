@@ -10,7 +10,7 @@ public class SimpleTest extends BasicGame {
 	 * @author Stanley Pliskin
 	 * 	In order for this test to run, we need to pass a VM argument to the native 
 	 *  lib directory:
-	 * -Djava.library.path=/Users/juliangamble/git/spawncamping-avenger/native/macosx
+	 * -Djava.library.path=/Users/xxxxx/git/spawncamping-avenger/native/macosx
 	 */
 
     public SimpleTest() {
