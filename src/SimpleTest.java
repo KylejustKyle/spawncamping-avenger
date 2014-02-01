@@ -25,6 +25,8 @@ public class SimpleTest extends BasicGame {
 
     // This is called on tick, in GameContainer.java updateAndRender
     // This is called first in the game loop.
+    // Monitor for keystroke in update logic, modify the player object - use this as the
+    // entity message passing object to allow the render loop to act upon the entity.
     @Override
     public void update(GameContainer container, int delta)
             throws SlickException {
@@ -40,7 +42,7 @@ public class SimpleTest extends BasicGame {
         
         // Monitor sustains
         if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
-        	g.drawString("Pressing"+keystroke, 0, 300);
+        	g.drawString("Pressing: "+keystroke, 0, 300);
         }
     }
 
