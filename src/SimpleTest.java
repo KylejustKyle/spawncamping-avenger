@@ -20,16 +20,32 @@ public class SimpleTest extends BasicGame {
     @Override
     public void init(GameContainer container) throws SlickException {}
 
+    // This is called on tick, in GameContainer.java updateAndRender
+    // This is called first in the game loop.
     @Override
     public void update(GameContainer container, int delta)
-            throws SlickException {}
+            throws SlickException {
+    	System.out.println("Update");
+    }
 
+    // This is called on tick, in GameContainer.java updateAndRender
+    // This is called after update.
     @Override
     public void render(GameContainer container, Graphics g)
             throws SlickException {
         g.drawString("Hello, Slick world!", 0, 100);
+        System.out.println("Render");
     }
 
+    @Override
+    public void keyPressed(int key, char c) {
+    	//Stub out a controller handler
+    	switch (key) {
+    	case 'w':
+
+    	}
+    }
+    
     public static void main(String[] args) {
         try {
             AppGameContainer app = new AppGameContainer(new SimpleTest());
