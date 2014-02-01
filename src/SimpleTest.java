@@ -1,3 +1,4 @@
+import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -12,7 +13,9 @@ public class SimpleTest extends BasicGame {
 	 *  lib directory:
 	 * -Djava.library.path=/Users/xxxxx/git/spawncamping-avenger/native/macosx
 	 */
-
+	private static AppGameContainer app;
+	private char keystroke;
+	
     public SimpleTest() {
         super("SimpleTest");
     }
@@ -25,7 +28,7 @@ public class SimpleTest extends BasicGame {
     @Override
     public void update(GameContainer container, int delta)
             throws SlickException {
-    	System.out.println("Update");
+    	
     }
 
     // This is called on tick, in GameContainer.java updateAndRender
@@ -33,22 +36,23 @@ public class SimpleTest extends BasicGame {
     @Override
     public void render(GameContainer container, Graphics g)
             throws SlickException {
-        g.drawString("Hello, Slick world!", 0, 100);
-        System.out.println("Render");
+        g.drawString("You've recently pressed: "+keystroke, 0, 200);
+        
+        // Monitor sustains
+        if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
+        	g.drawString("Pressing"+keystroke, 0, 300);
+        }
     }
 
     @Override
     public void keyPressed(int key, char c) {
     	//Stub out a controller handler
-    	switch (key) {
-    	case 'w':
-
-    	}
+    	keystroke = c;
     }
     
     public static void main(String[] args) {
         try {
-            AppGameContainer app = new AppGameContainer(new SimpleTest());
+            app = new AppGameContainer(new SimpleTest());
             app.start();
         } catch (SlickException e) {
             e.printStackTrace();
