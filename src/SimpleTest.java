@@ -1,9 +1,10 @@
 import org.lwjgl.input.Keyboard;
+import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.AppGameContainer;
 
 public class SimpleTest extends BasicGame {
 
@@ -15,6 +16,7 @@ public class SimpleTest extends BasicGame {
 	 */
 	private static AppGameContainer app;
 	private char keystroke;
+	private static MockPlayer player;
 	
     public SimpleTest() {
         super("SimpleTest");
@@ -30,7 +32,22 @@ public class SimpleTest extends BasicGame {
     @Override
     public void update(GameContainer container, int delta)
             throws SlickException {
-    	
+        // Monitor sustains
+        if(Keyboard.isKeyDown(Keyboard.KEY_S)) {
+        	player.y += 1;
+        }
+        
+        if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
+        	player.y -= 1;
+        }
+        
+        if(Keyboard.isKeyDown(Keyboard.KEY_A)) {
+        	player.x -= 1;
+        }
+        
+        if(Keyboard.isKeyDown(Keyboard.KEY_D)) {
+        	player.x += 1;
+        }
     }
 
     // This is called on tick, in GameContainer.java updateAndRender
@@ -38,23 +55,18 @@ public class SimpleTest extends BasicGame {
     @Override
     public void render(GameContainer container, Graphics g)
             throws SlickException {
-        g.drawString("You've recently pressed: "+keystroke, 0, 200);
-        
-        // Monitor sustains
-        if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
-        	g.drawString("Pressing: "+keystroke, 0, 300);
-        }
-    }
+        renderPlayer(g);
 
-    @Override
-    public void keyPressed(int key, char c) {
-    	//Stub out a controller handler
-    	keystroke = c;
+    }
+    
+    private void renderPlayer(Graphics g) throws SlickException {
+    	g.drawImage(new Image(player.uiPath, false, 0), player.x, player.y);
     }
     
     public static void main(String[] args) {
         try {
             app = new AppGameContainer(new SimpleTest());
+        	player = new MockPlayer();
             app.start();
         } catch (SlickException e) {
             e.printStackTrace();
