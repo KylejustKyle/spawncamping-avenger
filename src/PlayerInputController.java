@@ -27,8 +27,21 @@ public class PlayerInputController {
 		return currentState;
 	}
 	
+	public int boostControls(int burnFactor) {
+		if(Keyboard.isKeyDown(Keyboard.KEY_E) && burnFactor < 3) {
+			burnFactor += 1;
+			System.out.println("Increased burnFactor to "+burnFactor);
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_Q) && burnFactor > 1) {
+			burnFactor -= 1;
+			System.out.println("Decreased burnFactor to "+burnFactor);
+		}
+		
+		return burnFactor;
+	}
+	
 	private void consumeInFlightInput(MockPlayer player) {
-        if(Keyboard.isKeyDown(Keyboard.KEY_S) && player.y < screenHeight) {
+		
+        if(Keyboard.isKeyDown(Keyboard.KEY_S) && player.y+player.height < screenHeight) {
         	player.y += 1;
         }
         
@@ -40,7 +53,7 @@ public class PlayerInputController {
         	player.x -= 1;
         }
         
-        if(Keyboard.isKeyDown(Keyboard.KEY_D) && player.x < screenWidth) {
+        if(Keyboard.isKeyDown(Keyboard.KEY_D) && player.x+player.width < screenWidth) {
         	player.x += 1;
         }
 	}

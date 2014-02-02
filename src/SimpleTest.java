@@ -17,6 +17,11 @@ public class SimpleTest extends BasicGame {
 	private static MockPlayer player;
 	private static PlayerInputController controller;
 	private static GameState currentState;
+	private static int burnFactor = 1;
+	private static WorldObjects worldObjects = null;
+	private static long time = System.currentTimeMillis();
+	private static long lastAdd = 0;
+	
     public SimpleTest() {
         super("SimpleTest");
     }
@@ -30,7 +35,13 @@ public class SimpleTest extends BasicGame {
     public void update(GameContainer container, int delta)
             throws SlickException {
     	currentState = controller.consumeInput(player, currentState);
+    	worldObjects.pullObjectsDown(burnFactor, app.getHeight());
     	
+    	if((System.currentTimeMillis() - time) > 3000 ) {
+    		time = System.currentTimeMillis();
+    		worldObjects.wObjects.add(new WorldObject(20, 0));
+    		worldObjects.wObjects.add(new WorldObject(620, 0));
+    	}
     	
     	// Check for exit status 
     	// @TODO we may not want to do this check each update loop, and just pass the app context into the
@@ -47,10 +58,24 @@ public class SimpleTest extends BasicGame {
     public void render(GameContainer container, Graphics g)
             throws SlickException {
         renderPlayer(g);
+        renderObjects(g);
+        g.drawString("BurnFactor: "+burnFactor, 0, 40);
+        g.drawString("WorldObjectCount: "+worldObjects.wObjects.size(), 0, 80);
     }
     
     private void renderPlayer(Graphics g) throws SlickException {
     	g.drawImage(new Image(player.uiPath, false, 0), player.x, player.y);
+    }
+    
+    private void renderObjects(Graphics g) throws SlickException {
+    	for(WorldObject worldObject : worldObjects.wObjects) {
+    		g.drawImage(new Image(worldObject.uiPath, false, 0), worldObject.x, worldObject.y);
+    	}
+    }
+    
+    @Override
+    public void keyPressed(int x, char b) {
+    	burnFactor = controller.boostControls(burnFactor);
     }
     
     public static void main(String[] args) {
@@ -61,6 +86,7 @@ public class SimpleTest extends BasicGame {
         	player = new MockPlayer();
         	controller = new PlayerInputController( app.getWidth(), app.getHeight());
         	currentState =  GameState.IN_FLIGHT;
+        	worldObjects = new WorldObjects();
         	
         	// Start game loop
             app.start();
