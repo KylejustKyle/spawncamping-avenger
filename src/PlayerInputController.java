@@ -29,7 +29,7 @@ public class PlayerInputController {
 	
 	public int boostControls(int burnFactor) {
 		if(Keyboard.isKeyDown(Keyboard.KEY_E) && burnFactor < 3) {
-			System.out.println("Increased burnFactor to "+burnFactor);
+			burnFactor += 1;
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_Q) && burnFactor > 1) {
 			burnFactor -= 1;
 		}
