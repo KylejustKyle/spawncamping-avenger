@@ -59,8 +59,35 @@ public class SimpleTest extends BasicGame {
             throws SlickException {
         renderPlayer(g);
         renderObjects(g);
-        g.drawString("BurnFactor: "+burnFactor, 0, 40);
-        g.drawString("WorldObjectCount: "+worldObjects.wObjects.size(), 0, 80);
+        renderDebugMenu(g);
+    }
+    
+    /**
+     * @TODO
+     * For ease at the moment we will place listener logic for keys that have a atomic 1 press logic attached.
+     * We care about fidelity for these controls & currently the playerInputController doesn't handle that well.
+     */
+    @Override
+    public void keyPressed(int x, char b) {
+    	burnFactor = controller.boostControls(burnFactor);
+    }
+    
+    public static void main(String[] args) {
+        try {
+        	
+        	// Initialize game state
+            app = new AppGameContainer(new SimpleTest());
+        	player = new MockPlayer(app.getWidth()/2, app.getHeight()/2);
+        	controller = new PlayerInputController( app.getWidth(), app.getHeight());
+        	currentState =  GameState.IN_FLIGHT;
+        	worldObjects = new WorldObjects();
+        	
+        	// Start game loop
+            app.start();
+
+        } catch (SlickException e) {
+            e.printStackTrace();
+        }
     }
     
     private void renderPlayer(Graphics g) throws SlickException {
@@ -73,26 +100,8 @@ public class SimpleTest extends BasicGame {
     	}
     }
     
-    @Override
-    public void keyPressed(int x, char b) {
-    	burnFactor = controller.boostControls(burnFactor);
-    }
-    
-    public static void main(String[] args) {
-        try {
-        	
-        	// Initialize game state
-            app = new AppGameContainer(new SimpleTest());
-        	player = new MockPlayer();
-        	controller = new PlayerInputController( app.getWidth(), app.getHeight());
-        	currentState =  GameState.IN_FLIGHT;
-        	worldObjects = new WorldObjects();
-        	
-        	// Start game loop
-            app.start();
-
-        } catch (SlickException e) {
-            e.printStackTrace();
-        }
+    private void renderDebugMenu(Graphics g) {
+        g.drawString("BurnFactor: "+burnFactor, 0, 40);
+        g.drawString("WorldObjectCount: "+worldObjects.wObjects.size(), 0, 60);
     }
 }

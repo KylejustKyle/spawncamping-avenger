@@ -9,9 +9,9 @@ public class MockPlayer {
 	public int height;
 	public int width;
 	
-	public MockPlayer() throws SlickException {
-		x = 0;
-		y = 0;
+	public MockPlayer(int startX, int startY) throws SlickException {
+		x = startX;
+		y = startY;
 		height = 50;
 		width = 50;
 		uiPath = "resources/Test.png";
