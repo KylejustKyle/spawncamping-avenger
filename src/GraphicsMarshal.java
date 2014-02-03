@@ -1,5 +1,6 @@
 import java.util.Hashtable;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -14,6 +15,8 @@ public class GraphicsMarshal {
 	public Image trackingWall;
 	public Image playerBasicProjectile;
 	
+	public Animation jetAfterburner;
+	
 	private Hashtable<ShipVector, Image> playerShip;
 	
 	public GraphicsMarshal () {
@@ -26,6 +29,9 @@ public class GraphicsMarshal {
 			
 			trackingWall = new Image("resources/VerticalLine.png");
 			playerBasicProjectile = new Image("resources/Projectile_Small.png");
+
+	    	Image[] aferburnerAnim = {new Image("resources/Afterburner_1.png"), new Image("resources/Afterburner_2.png")};
+	    	jetAfterburner = new Animation(aferburnerAnim, 200);
 			
 			playerShip.put(ShipVector.LEFT, playerShipLeanLeft);
 			playerShip.put(ShipVector.RIGHT, playerShipLeanRight);
@@ -51,5 +57,9 @@ public class GraphicsMarshal {
 	
 	public Image getPlayerProjectile() {
 		return playerBasicProjectile;
+	}
+	
+	public Animation getPlayerAfterburner() {
+		return jetAfterburner;
 	}
 }

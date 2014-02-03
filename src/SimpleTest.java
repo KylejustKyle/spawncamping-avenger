@@ -134,6 +134,7 @@ public class SimpleTest extends BasicGame {
     
     private void renderPlayer(Graphics g) throws SlickException {
     	gMarshal.getPlayerShipGraphic(player.vector).draw(player.x, player.y);
+    	gMarshal.getPlayerAfterburner().draw(player.x, player.y);
     }
     
     private void renderObjects(Graphics g) throws SlickException {
