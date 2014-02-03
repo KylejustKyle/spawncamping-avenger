@@ -13,7 +13,7 @@ public abstract class Projectile {
 		team = newTeam;
 		x = startingX;
 		y = startingY;
-		uiPath = "resources/Projectile.png";
+		uiPath = "resources/Projectile_Small.png";
 	}
 	
 	public abstract void updateLocation();
