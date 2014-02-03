@@ -1,5 +1,7 @@
 import org.lwjgl.input.Keyboard;
 
+import Projectiles.VerticalProjectile;
+
 
 
 public class PlayerInputController {
@@ -12,7 +14,7 @@ public class PlayerInputController {
 		this.screenWidth = screenWidth;
 	}
 	
-	public GameState consumeInput(MockPlayer player, GameState currentState) {
+	public GameState consumeInput(MockPlayer player, GameState currentState, WorldProjectiles wProjectiles) {
 		// Check for general keystrokes first
 		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 			currentState = GameState.END;
@@ -21,7 +23,7 @@ public class PlayerInputController {
 		
 		switch(currentState) {
 			case IN_FLIGHT: 
-				consumeInFlightInput(player);
+				consumeInFlightInput(player, wProjectiles);
 		}
 		
 		return currentState;
@@ -37,7 +39,14 @@ public class PlayerInputController {
 		return burnFactor;
 	}
 	
-	private void consumeInFlightInput(MockPlayer player) {
+	public void fireControls(MockPlayer player, WorldProjectiles wProjectiles) {
+		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+			//Projectile factory should be used here instead.
+			wProjectiles.wProjectiles.add(new VerticalProjectile(1, 1, player.x, player.y));
+		}
+	}
+	
+	private void consumeInFlightInput(MockPlayer player, WorldProjectiles wProjectiles) {
 		
         if(Keyboard.isKeyDown(Keyboard.KEY_S) && player.y+player.height < screenHeight) {
         	player.y += 1;

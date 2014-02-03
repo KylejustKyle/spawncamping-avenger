@@ -8,6 +8,7 @@ public class WorldObjects {
 		wObjects = new ArrayList<WorldObject>();
 	}
 	
+	//This needs to be refactored to let the world object determine it's own path.
 	public void pullObjectsDown(int burnFactor, int maxHeight) {
 		ArrayList<WorldObject> removalSet = new ArrayList<WorldObject>();
 		
