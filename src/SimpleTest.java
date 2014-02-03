@@ -112,7 +112,7 @@ public class SimpleTest extends BasicGame {
         	worldObjects = new WorldObjects();
         	worldProjectiles = new WorldProjectiles();
         	
-        	// Start game l oop
+        	// Start game loop
             app.start();
 
         } catch (SlickException e) {
@@ -126,13 +126,13 @@ public class SimpleTest extends BasicGame {
     
     private void renderObjects(Graphics g) throws SlickException {
     	for(WorldObject worldObject : worldObjects.wObjects) {
-    		g.drawImage(new Image(worldObject.uiPath, false, 0), worldObject.x, worldObject.y);
+    		gMarshal.getTrackingWallGraphic().draw(worldObject.x, worldObject.y);
     	}
     }
     
     private void renderProjectiles(Graphics g) throws SlickException {
     	for(Projectile projectile : worldProjectiles.wProjectiles) {
-    		g.drawImage(new Image(projectile.uiPath, false, 0), projectile.x, projectile.y);
+    		gMarshal.getPlayerProjectile().draw(projectile.x, projectile.y);
     	}
     }
     
