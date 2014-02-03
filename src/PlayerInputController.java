@@ -1,5 +1,7 @@
 import org.lwjgl.input.Keyboard;
 
+import PlayerShip.MockPlayer;
+import PlayerShip.ShipVector;
 import Projectiles.VerticalProjectile;
 
 
@@ -14,7 +16,7 @@ public class PlayerInputController {
 		this.screenWidth = screenWidth;
 	}
 	
-	public GameState consumeInput(MockPlayer player, GameState currentState, WorldProjectiles wProjectiles) {
+	public GameState consumeInput(MockPlayer player, GameState currentState, int delta) {
 		// Check for general keystrokes first
 		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 			currentState = GameState.END;
@@ -23,7 +25,9 @@ public class PlayerInputController {
 		
 		switch(currentState) {
 			case IN_FLIGHT: 
-				consumeInFlightInput(player, wProjectiles);
+				consumeInFlightInput(player, delta);
+			case MENU:
+				consumeInMenuInput();
 		}
 		
 		return currentState;
@@ -46,22 +50,28 @@ public class PlayerInputController {
 		}
 	}
 	
-	private void consumeInFlightInput(MockPlayer player, WorldProjectiles wProjectiles) {
+	private void consumeInFlightInput(MockPlayer player, int delta) {
 		
         if(Keyboard.isKeyDown(Keyboard.KEY_S) && player.y+player.height < screenHeight) {
-        	player.y += 1;
+        	player.y += delta;
         }
         
         if(Keyboard.isKeyDown(Keyboard.KEY_W) && player.y >= 0 ) {
-        	player.y -= 1;
+        	player.y -= delta;
         }
         
         if(Keyboard.isKeyDown(Keyboard.KEY_A) && player.x >= 0) {
-        	player.x -= 1;
+        	player.x -= delta;
+        	player.vector = ShipVector.LEFT;
         }
         
         if(Keyboard.isKeyDown(Keyboard.KEY_D) && player.x+player.width < screenWidth) {
-        	player.x += 1;
+        	player.x += delta;
+        	player.vector = ShipVector.RIGHT;
+        }
+        
+        if(!Keyboard.isKeyDown(Keyboard.KEY_D) && !Keyboard.isKeyDown(Keyboard.KEY_A)) {
+        	player.vector = ShipVector.CENTER;
         }
 	}
 	

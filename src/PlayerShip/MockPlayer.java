@@ -1,3 +1,4 @@
+package PlayerShip;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.SlickException;
 
@@ -11,6 +12,7 @@ public class MockPlayer {
 	public int height;
 	public int width;
 	public Animation idle;
+	public ShipVector vector;
 	
 	public MockPlayer(int startX, int startY) throws SlickException {
 		x = startX;
@@ -19,5 +21,6 @@ public class MockPlayer {
 		width = 100;
 		middle = width/2;
 		uiPath = "resources/Jet_A.png";
+		vector = ShipVector.CENTER;
 	}
 }
