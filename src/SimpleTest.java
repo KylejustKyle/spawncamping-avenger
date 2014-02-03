@@ -6,6 +6,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import PlayerShip.MockPlayer;
 import Projectiles.Projectile;
 
 public class SimpleTest extends BasicGame {
@@ -24,8 +25,8 @@ public class SimpleTest extends BasicGame {
 	private static WorldObjects worldObjects = null;
 	private static WorldProjectiles worldProjectiles = null;
 	private static long time = System.currentTimeMillis();
-	private static long lastAdd = 0;
 	private static boolean runAnimTest = false;
+	private static GraphicsMarshal gMarshal;
 	
 	private static Animation jetIdle;
     public SimpleTest() {
@@ -36,6 +37,8 @@ public class SimpleTest extends BasicGame {
     public void init(GameContainer container) throws SlickException {
     	Image[] idleAnim = {new Image("resources/AnimTest1.png"), new Image("resources/AnimTest2.png")};
     	jetIdle = new Animation(idleAnim, 200);
+    	app.getInput().disableKeyRepeat();
+    	gMarshal = new GraphicsMarshal();
     }
 
     // This is called on tick, in GameContainer.java updateAndRender
@@ -43,7 +46,10 @@ public class SimpleTest extends BasicGame {
     @Override
     public void update(GameContainer container, int delta)
             throws SlickException {
-    	currentState = controller.consumeInput(player, currentState, worldProjectiles);
+    	
+    	// @TODO Delta should be the unit of increment, not 1.
+    	
+    	currentState = controller.consumeInput(player, currentState, delta);
     	worldObjects.pullObjectsDown(burnFactor, app.getHeight());
     	worldProjectiles.updateProjectiles();
     	
@@ -65,8 +71,7 @@ public class SimpleTest extends BasicGame {
     // This is called on tick, in GameContainer.java updateAndRender
     // This is called after update.
     @Override
-    public void render(GameContainer container, Graphics g)
-            throws SlickException {
+    public void render(GameContainer container, Graphics g) throws SlickException {
         renderPlayer(g);
         renderObjects(g);
         renderProjectiles(g);
@@ -114,8 +119,7 @@ public class SimpleTest extends BasicGame {
     }
     
     private void renderPlayer(Graphics g) throws SlickException {
-    	g.drawImage(new Image(player.uiPath, false, 0), player.x, player.y);
-
+    	gMarshal.getPlayerShipGraphic(player.vector).draw(player.x, player.y);
     }
     
     private void renderObjects(Graphics g) throws SlickException {
