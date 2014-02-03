@@ -1,3 +1,4 @@
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
@@ -24,13 +25,18 @@ public class SimpleTest extends BasicGame {
 	private static WorldProjectiles worldProjectiles = null;
 	private static long time = System.currentTimeMillis();
 	private static long lastAdd = 0;
+	private static boolean runAnimTest = false;
 	
+	private static Animation jetIdle;
     public SimpleTest() {
         super("SimpleTest");
     }
     
     @Override
-    public void init(GameContainer container) throws SlickException {}
+    public void init(GameContainer container) throws SlickException {
+    	Image[] idleAnim = {new Image("resources/AnimTest1.png"), new Image("resources/AnimTest2.png")};
+    	jetIdle = new Animation(idleAnim, 200);
+    }
 
     // This is called on tick, in GameContainer.java updateAndRender
     // This is called first in the game loop.
@@ -65,6 +71,11 @@ public class SimpleTest extends BasicGame {
         renderObjects(g);
         renderProjectiles(g);
         renderDebugMenu(g);
+        
+        if(runAnimTest) {
+        	jetIdle.draw(100,100);
+        }
+
     }
     
     /**
@@ -76,6 +87,10 @@ public class SimpleTest extends BasicGame {
     public void keyPressed(int x, char b) {
     	burnFactor = controller.boostControls(burnFactor);
     	controller.fireControls(player, worldProjectiles);
+    	
+    	if(b == 'y') {
+    		runAnimTest= true;
+    	}
     }
     
     public static void main(String[] args) {
@@ -83,6 +98,7 @@ public class SimpleTest extends BasicGame {
         	
         	// Initialize game state
             app = new AppGameContainer(new SimpleTest());
+            app.setTitle("Divergent Pancakes v0.0.1");
         	player = new MockPlayer(app.getWidth()/2, app.getHeight()/2);
         	controller = new PlayerInputController( app.getWidth(), app.getHeight());
         	currentState =  GameState.IN_FLIGHT;
@@ -99,6 +115,7 @@ public class SimpleTest extends BasicGame {
     
     private void renderPlayer(Graphics g) throws SlickException {
     	g.drawImage(new Image(player.uiPath, false, 0), player.x, player.y);
+
     }
     
     private void renderObjects(Graphics g) throws SlickException {

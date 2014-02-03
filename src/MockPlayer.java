@@ -1,3 +1,4 @@
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.SlickException;
 
 
@@ -9,6 +10,7 @@ public class MockPlayer {
 	public String uiPath;
 	public int height;
 	public int width;
+	public Animation idle;
 	
 	public MockPlayer(int startX, int startY) throws SlickException {
 		x = startX;
