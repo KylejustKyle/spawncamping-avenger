@@ -15,7 +15,7 @@ public class WorldObjects {
 		for(WorldObject worldObject : wObjects ) {
 			worldObject.y += burnFactor;
 			
-			if(worldObject.y > maxHeight) {
+			if(ObjectTrackerUtility.isOutsideOfWindow(worldObject)) {
 				removalSet.add(worldObject);
 			}
 		}

@@ -17,6 +17,13 @@ public class WorldProjectiles {
 		
 		for(Projectile projectile : wProjectiles ) {
 			projectile.updateLocation();
+			
+			if(ObjectTrackerUtility.isOutsideOfWindow(projectile)) {
+				removalSet.add(projectile);
+			}
 		}
+		
+		
+		wProjectiles.removeAll(removalSet);
 	}
 }
