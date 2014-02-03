@@ -8,6 +8,7 @@ import org.newdawn.slick.SlickException;
 
 import playerShip.MockPlayer;
 import projectiles.Projectile;
+import utility.IntervalTimer;
 import worldEntities.WorldObject;
 import worldEntities.WorldObjects;
 
@@ -26,9 +27,12 @@ public class SimpleTest extends BasicGame {
 	private static int burnFactor = 1;
 	private static WorldObjects worldObjects = null;
 	private static WorldProjectiles worldProjectiles = null;
-	private static long time = System.currentTimeMillis();
 	private static boolean runAnimTest = false;
 	private static GraphicsMarshal gMarshal;
+	private static long distanceTravelled = 0;
+	
+	private static IntervalTimer spawnTimer;
+	private static IntervalTimer distanceTimer;
 	
 	private static Animation jetIdle;
     public SimpleTest() {
@@ -39,6 +43,10 @@ public class SimpleTest extends BasicGame {
     public void init(GameContainer container) throws SlickException {
     	Image[] idleAnim = {new Image("resources/AnimTest1.png"), new Image("resources/AnimTest2.png")};
     	jetIdle = new Animation(idleAnim, 200);
+    	
+    	spawnTimer = new IntervalTimer(System.currentTimeMillis(), 1000);
+    	distanceTimer = new IntervalTimer(System.currentTimeMillis(), 1000);
+    	
     	app.getInput().disableKeyRepeat();
     	gMarshal = new GraphicsMarshal();
     }
@@ -49,16 +57,20 @@ public class SimpleTest extends BasicGame {
     public void update(GameContainer container, int delta)
             throws SlickException {
     	
-    	// @TODO Delta should be the unit of increment, not 1.
-    	
     	currentState = controller.consumeInput(player, currentState, delta);
     	worldObjects.pullObjectsDown(burnFactor, app.getHeight());
     	worldProjectiles.updateProjectiles();
     	
-    	if((System.currentTimeMillis() - time) > 1000 ) {
-    		time = System.currentTimeMillis();
+    	// @TODO we want to move this logic out into a different class, or a delegate like structure
+    	if(spawnTimer.isInterval()) {
+    		spawnTimer.rootTime = System.currentTimeMillis();
     		worldObjects.wObjects.add(new WorldObject(20, 0));
     		worldObjects.wObjects.add(new WorldObject(620, 0));
+    	}
+    	
+    	if(distanceTimer.isInterval()) {
+    		distanceTravelled += ((System.currentTimeMillis() - distanceTimer.rootTime)/1000) * burnFactor;
+    		distanceTimer.rootTime = System.currentTimeMillis();
     	}
     	
     	// Check for exit status 
@@ -140,5 +152,6 @@ public class SimpleTest extends BasicGame {
         g.drawString("BurnFactor: "+burnFactor, 0, 40);
         g.drawString("WorldObjectCount: "+worldObjects.wObjects.size(), 0, 55);
         g.drawString("WorldProjectileCount: "+worldProjectiles.wProjectiles.size(), 0, 70);
+        g.drawString("DistanceTravelled: "+distanceTravelled, 0, 85);
     }
 }

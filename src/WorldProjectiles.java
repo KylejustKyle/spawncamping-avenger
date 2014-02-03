@@ -24,7 +24,6 @@ public class WorldProjectiles {
 			}
 		}
 		
-		
 		wProjectiles.removeAll(removalSet);
 	}
 }
