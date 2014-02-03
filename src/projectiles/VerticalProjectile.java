@@ -1,4 +1,4 @@
-package Projectiles;
+package projectiles;
 
 
 public class VerticalProjectile extends Projectile{

@@ -1,4 +1,4 @@
-package PlayerShip;
+package playerShip;
 
 public enum ShipVector {
 	LEFT,

@@ -3,13 +3,16 @@ import java.util.Hashtable;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import PlayerShip.ShipVector;
+import playerShip.ShipVector;
 
 
 public class GraphicsMarshal {
 	public Image playerShipIdle;
 	public Image playerShipLeanLeft;
 	public Image playerShipLeanRight;
+	
+	public Image trackingWall;
+	public Image playerBasicProjectile;
 	
 	private Hashtable<ShipVector, Image> playerShip;
 	
@@ -21,6 +24,9 @@ public class GraphicsMarshal {
 			playerShipLeanLeft = new Image("resources/JetLeanLeft.png");
 			playerShipLeanRight = new Image("resources/JetLeanRight.png");
 			
+			trackingWall = new Image("resources/VerticalLine.png");
+			playerBasicProjectile = new Image("resources/Projectile_Small.png");
+			
 			playerShip.put(ShipVector.LEFT, playerShipLeanLeft);
 			playerShip.put(ShipVector.RIGHT, playerShipLeanRight);
 			playerShip.put(ShipVector.CENTER, playerShipIdle);
@@ -31,7 +37,19 @@ public class GraphicsMarshal {
 		}
 	}
 	
+	public void initializePlayerAssets() {
+		
+	}
+	
 	public Image getPlayerShipGraphic(ShipVector vector) {
 		return playerShip.get(vector);
+	}
+	
+	public Image getTrackingWallGraphic() {
+		return trackingWall;
+	}
+	
+	public Image getPlayerProjectile() {
+		return playerBasicProjectile;
 	}
 }
