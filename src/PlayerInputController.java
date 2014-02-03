@@ -42,7 +42,7 @@ public class PlayerInputController {
 	public void fireControls(MockPlayer player, WorldProjectiles wProjectiles) {
 		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
 			//Projectile factory should be used here instead.
-			wProjectiles.wProjectiles.add(new VerticalProjectile(1, 1, player.x, player.y));
+			wProjectiles.wProjectiles.add(new VerticalProjectile(1, 1, player.x+player.middle, player.y));
 		}
 	}
 	
