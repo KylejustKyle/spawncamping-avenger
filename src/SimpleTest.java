@@ -5,6 +5,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import Projectiles.Projectile;
+
 public class SimpleTest extends BasicGame {
 
 	/**
@@ -19,6 +21,7 @@ public class SimpleTest extends BasicGame {
 	private static GameState currentState;
 	private static int burnFactor = 1;
 	private static WorldObjects worldObjects = null;
+	private static WorldProjectiles worldProjectiles = null;
 	private static long time = System.currentTimeMillis();
 	private static long lastAdd = 0;
 	
@@ -34,10 +37,11 @@ public class SimpleTest extends BasicGame {
     @Override
     public void update(GameContainer container, int delta)
             throws SlickException {
-    	currentState = controller.consumeInput(player, currentState);
+    	currentState = controller.consumeInput(player, currentState, worldProjectiles);
     	worldObjects.pullObjectsDown(burnFactor, app.getHeight());
+    	worldProjectiles.updateProjectiles();
     	
-    	if((System.currentTimeMillis() - time) > 3000 ) {
+    	if((System.currentTimeMillis() - time) > 1000 ) {
     		time = System.currentTimeMillis();
     		worldObjects.wObjects.add(new WorldObject(20, 0));
     		worldObjects.wObjects.add(new WorldObject(620, 0));
@@ -59,6 +63,7 @@ public class SimpleTest extends BasicGame {
             throws SlickException {
         renderPlayer(g);
         renderObjects(g);
+        renderProjectiles(g);
         renderDebugMenu(g);
     }
     
@@ -70,6 +75,7 @@ public class SimpleTest extends BasicGame {
     @Override
     public void keyPressed(int x, char b) {
     	burnFactor = controller.boostControls(burnFactor);
+    	controller.fireControls(player, worldProjectiles);
     }
     
     public static void main(String[] args) {
@@ -81,8 +87,9 @@ public class SimpleTest extends BasicGame {
         	controller = new PlayerInputController( app.getWidth(), app.getHeight());
         	currentState =  GameState.IN_FLIGHT;
         	worldObjects = new WorldObjects();
+        	worldProjectiles = new WorldProjectiles();
         	
-        	// Start game loop
+        	// Start game l oop
             app.start();
 
         } catch (SlickException e) {
@@ -100,8 +107,15 @@ public class SimpleTest extends BasicGame {
     	}
     }
     
+    private void renderProjectiles(Graphics g) throws SlickException {
+    	for(Projectile projectile : worldProjectiles.wProjectiles) {
+    		g.drawImage(new Image(projectile.uiPath, false, 0), projectile.x, projectile.y);
+    	}
+    }
+    
     private void renderDebugMenu(Graphics g) {
         g.drawString("BurnFactor: "+burnFactor, 0, 40);
-        g.drawString("WorldObjectCount: "+worldObjects.wObjects.size(), 0, 60);
+        g.drawString("WorldObjectCount: "+worldObjects.wObjects.size(), 0, 55);
+        g.drawString("WorldProjectileCount: "+worldProjectiles.wProjectiles.size(), 0, 70);
     }
 }
