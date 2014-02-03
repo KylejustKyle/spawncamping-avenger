@@ -24,8 +24,8 @@ public class GraphicsMarshal {
 		
 		try {
 			playerShipIdle = new Image("resources/Jet_A.png");
-			playerShipLeanLeft = new Image("resources/JetLeanLeft.png");
-			playerShipLeanRight = new Image("resources/JetLeanRight.png");
+			playerShipLeanLeft = new Image("resources/Jet_Lean_Left.png");
+			playerShipLeanRight = new Image("resources/Jet_Lean_Right.png");
 			
 			trackingWall = new Image("resources/VerticalLine.png");
 			playerBasicProjectile = new Image("resources/Projectile_Small.png");
