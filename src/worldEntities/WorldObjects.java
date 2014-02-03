@@ -1,8 +1,11 @@
+package worldEntities;
 import java.util.ArrayList;
+
+import utility.ObjectTrackerUtility;
 
 
 public class WorldObjects {
-	ArrayList<WorldObject> wObjects = null;
+	public ArrayList<WorldObject> wObjects = null;
 	
 	public WorldObjects() {
 		wObjects = new ArrayList<WorldObject>();

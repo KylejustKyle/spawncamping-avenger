@@ -1,4 +1,6 @@
-import Projectiles.Projectile;
+package utility;
+import projectiles.Projectile;
+import worldEntities.WorldObject;
 
 public class ObjectTrackerUtility {
 	private static int WIDTH = 680;

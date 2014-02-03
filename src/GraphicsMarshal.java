@@ -3,7 +3,7 @@ import java.util.Hashtable;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import PlayerShip.ShipVector;
+import playerShip.ShipVector;
 
 
 public class GraphicsMarshal {
@@ -29,6 +29,10 @@ public class GraphicsMarshal {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void initializePlayerAssets() {
+		
 	}
 	
 	public Image getPlayerShipGraphic(ShipVector vector) {

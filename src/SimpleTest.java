@@ -6,8 +6,10 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import PlayerShip.MockPlayer;
-import Projectiles.Projectile;
+import playerShip.MockPlayer;
+import projectiles.Projectile;
+import worldEntities.WorldObject;
+import worldEntities.WorldObjects;
 
 public class SimpleTest extends BasicGame {
 

@@ -1,4 +1,4 @@
-package PlayerShip;
+package playerShip;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.SlickException;
 

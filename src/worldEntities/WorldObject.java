@@ -1,3 +1,4 @@
+package worldEntities;
 
 public class WorldObject {
 	public String uiPath;
