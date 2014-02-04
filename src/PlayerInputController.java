@@ -73,6 +73,9 @@ public class PlayerInputController {
         if(!Keyboard.isKeyDown(Keyboard.KEY_D) && !Keyboard.isKeyDown(Keyboard.KEY_A)) {
         	player.vector = ShipVector.CENTER;
         }
+        
+        player.boundingBox.setX(player.x);
+        player.boundingBox.setY(player.y);
 	}
 	
 	private void consumeInMenuInput() {
