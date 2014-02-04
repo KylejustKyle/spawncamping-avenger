@@ -1,10 +1,8 @@
-import java.util.List;
-
-import org.newdawn.slick.Animation;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.ShapeFill;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Point;
 
@@ -30,7 +28,7 @@ public class SimpleTest extends BasicGame {
 	private static GameState currentState;
 	private static int burnFactor = 1;
 
-	private static boolean runAnimTest = false;
+	private static boolean isDebugMode = false;
 	private static long distanceTravelled = 0;
 	
 	/*
@@ -118,8 +116,8 @@ public class SimpleTest extends BasicGame {
         renderProjectiles(g);
         renderDebugMenu(g);
         
-        if(runAnimTest) {
-        	gMarshal.createExplosionAssets().draw(300, 300);
+        if(isDebugMode) {
+        	renderBoundingBoxes(g);
         }
     }
     
@@ -133,8 +131,8 @@ public class SimpleTest extends BasicGame {
     	burnFactor = controller.boostControls(burnFactor);
     	controller.fireControls(player, worldProjectiles);
     	
-    	if(b == 'y') {
-    		runAnimTest= true;
+    	if(b == 'h') {
+    		isDebugMode= (isDebugMode ? false : true );
     	}
     	
     	if(b == 'r') {
@@ -155,7 +153,7 @@ public class SimpleTest extends BasicGame {
         	worldObjects 		= new WorldObjects();
         	worldProjectiles 	= new WorldProjectiles();
         	collidableObjects 	= new CollidableObjects();
-        	collidableObjects.cObjects.add(new CollidableObject(300, 100, 100, 100));
+        	collidableObjects.cObjects.add(new CollidableObject(300, 100, 50, 50));
         	
             app.setTitle("Divergent Pancakes v0.0.1");
         	
@@ -172,7 +170,7 @@ public class SimpleTest extends BasicGame {
     		gMarshal.getPlayerShipGraphic(player.vector).draw(player.x, player.y);
     		gMarshal.getPlayerAfterburner(burnFactor).draw(player.x, player.y);
     	} else {
-    		g.drawString("You died; press R to restart ", 300, 300);
+    		//Opts for death
     	}
     }
     
@@ -200,6 +198,17 @@ public class SimpleTest extends BasicGame {
         g.drawString("BurnFactor: "+burnFactor, 0, 40);
         g.drawString("WorldObjectCount: "+worldObjects.wObjects.size(), 0, 55);
         g.drawString("WorldProjectileCount: "+worldProjectiles.wProjectiles.size(), 0, 70);
-        g.drawString("DistanceTravelled: "+distanceTravelled, 0, 85);
+        g.drawString("CollidableObjectCount: "+collidableObjects.cObjects.size(), 0, 85);
+        g.drawString("DistanceTravelled: "+distanceTravelled, 0, 100);
+        g.drawString("DebugMode (h)", 0, 115);
+        g.drawString("Reset Player (r)", 0, 130);
+    }
+    
+    private void renderBoundingBoxes(Graphics g) {
+    	g.draw(player.boundingBox);
+    	
+    	for(CollidableObject collidableObject : collidableObjects.cObjects) {
+    		g.draw(collidableObject.boundingBox);
+    	}
     }
 }
