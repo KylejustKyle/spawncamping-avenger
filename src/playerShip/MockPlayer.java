@@ -16,6 +16,7 @@ public class MockPlayer {
 	public Animation idle;
 	public ShipVector vector;
 	public boolean isAlive;
+	public boolean shouldExplode;
 	
 	public MockPlayer(int startX, int startY) throws SlickException {
 		x = startX;
@@ -26,5 +27,7 @@ public class MockPlayer {
 		middle = width/2;
 		vector = ShipVector.CENTER;
 		isAlive = true;
+		// @TODO this is definitely a hack; need a better solution to message pass events for queue.
+		shouldExplode = false;
 	}
 }
