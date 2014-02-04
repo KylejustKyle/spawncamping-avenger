@@ -18,9 +18,6 @@ public class SimpleTest extends BasicGame {
 
 	/**
 	 * @author Stanley Plisskin
-	 * 	In order for this test to run, we need to pass a VM argument to the native 
-	 *  lib directory:
-	 * -Djava.library.path=/Users/xxxxx/git/spawncamping-avenger/native/macosx
 	 */
 	private static AppGameContainer app;
 	private static MockPlayer player;
@@ -103,24 +100,8 @@ public class SimpleTest extends BasicGame {
     	if(currentState.equals(GameState.END)) {
     		app.exit();
     	}
-    	
     }
 
-    // This is called on tick, in GameContainer.java updateAndRender
-    // This is called after update.
-    @Override
-    public void render(GameContainer container, Graphics g) throws SlickException {
-        renderPlayer(g);
-        renderGraphicsMarshalQueues();
-        renderObjects(g);
-        renderProjectiles(g);
-        renderDebugMenu(g);
-        
-        if(isDebugMode) {
-        	renderBoundingBoxes(g);
-        }
-    }
-    
     /**
      * @TODO
      * For ease at the moment we will place listener logic for keys that have a atomic 1 press logic attached.
@@ -128,8 +109,10 @@ public class SimpleTest extends BasicGame {
      */
     @Override
     public void keyPressed(int x, char b) {
-    	burnFactor = controller.boostControls(burnFactor);
-    	controller.fireControls(player, worldProjectiles);
+    	if(player.isAlive) {
+        	burnFactor = controller.boostControls(burnFactor);
+        	controller.fireControls(player, worldProjectiles);
+    	}
     	
     	if(b == 'h') {
     		isDebugMode= (isDebugMode ? false : true );
@@ -162,6 +145,26 @@ public class SimpleTest extends BasicGame {
 
         } catch (SlickException e) {
             e.printStackTrace();
+        }
+    }
+    
+    //**************************************************************************************************
+    //**								Rendering Source
+    //**************************************************************************************************
+    
+    
+    // This is called on tick, in GameContainer.java updateAndRender
+    // This is called after update.
+    @Override
+    public void render(GameContainer container, Graphics g) throws SlickException {
+        renderPlayer(g);
+        renderGraphicsMarshalQueues();
+        renderObjects(g);
+        renderProjectiles(g);
+        renderDebugMenu(g);
+        
+        if(isDebugMode) {
+        	renderBoundingBoxes(g);
         }
     }
     

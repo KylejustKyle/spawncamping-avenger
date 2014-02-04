@@ -48,7 +48,7 @@ public class GraphicsMarshal {
 			playerShipLeanRight = new Image("resources/Jet_Lean_Right.png");
 			
 			trackingWall = new Image("resources/VerticalLine.png");
-			testCollidable = new Image("resources/Test.png");
+			testCollidable = new Image("resources/Test2.png");
 			playerBasicProjectile = new Image("resources/Projectile_Small.png");
 
 	    	Image[] aferburnerAnimT1 = {new Image("resources/Afterburner_1.png"), new Image("resources/Afterburner_2.png")};
