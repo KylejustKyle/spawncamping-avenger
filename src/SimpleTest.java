@@ -1,10 +1,12 @@
+import java.util.List;
+
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Point;
 
 import playerShip.MockPlayer;
 import projectiles.Projectile;
@@ -87,6 +89,16 @@ public class SimpleTest extends BasicGame {
     		distanceTimer.rootTime = System.currentTimeMillis();
     	}
     	
+    	// Player ship died, run death routine
+    	if(player.shouldExplode) {
+    		gMarshal.queueAnimation(gMarshal.createExplosionAssets(), new Point(player.x, player.y));
+    		player.shouldExplode = false;
+    		player.boundingBox.setX(320);
+    		player.boundingBox.setY(240);
+    		player.x = 320;
+    		player.y = 240;
+    	}
+    	
     	// Check for exit status 
     	// @TODO we may not want to do this check each update loop, and just pass the app context into the
     	// Input Controller, so we can kill the app. Increase of coupling though.
@@ -101,9 +113,14 @@ public class SimpleTest extends BasicGame {
     @Override
     public void render(GameContainer container, Graphics g) throws SlickException {
         renderPlayer(g);
+        renderGraphicsMarshalQueues();
         renderObjects(g);
         renderProjectiles(g);
         renderDebugMenu(g);
+        
+        if(runAnimTest) {
+        	gMarshal.createExplosionAssets().draw(300, 300);
+        }
     }
     
     /**
@@ -157,6 +174,10 @@ public class SimpleTest extends BasicGame {
     	} else {
     		g.drawString("You died; press R to restart ", 300, 300);
     	}
+    }
+    
+    private void renderGraphicsMarshalQueues() throws SlickException {
+    	gMarshal.drawAnimationQueue();
     }
     
     private void renderObjects(Graphics g) throws SlickException {

@@ -1,8 +1,12 @@
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Stack;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Point;
 
 import playerShip.AfterburnerType;
 import playerShip.ShipVector;
@@ -20,13 +24,23 @@ public class GraphicsMarshal {
 	public Animation jetAfterburnerTier1;
 	public Animation jetAfterburnerTier2;
 	public Animation jetAfterburnerTier3;
+	public Animation explosion;
 	
 	private Hashtable<ShipVector, Image> playerShip;
 	private Hashtable<AfterburnerType, Animation> afterburner;
 	
+	private Stack<Animation> queuedAnimations;
+	private Stack<Point> queuedAnimationCoordinates;
+	private Stack<Image> queuedImages;
+	private Stack<Point> queuedImageCoordinates;
+	
 	public GraphicsMarshal () {
 		playerShip = new  Hashtable<ShipVector, Image>();
 		afterburner = new Hashtable<AfterburnerType, Animation>();
+		queuedAnimations = new Stack<Animation>();
+		queuedImages = new Stack<Image>();
+		queuedAnimationCoordinates = new Stack<Point>();
+		queuedImageCoordinates = new Stack<Point>();
 		
 		try {
 			playerShipIdle = new Image("resources/Jet_A.png");
@@ -62,6 +76,21 @@ public class GraphicsMarshal {
 		
 	}
 	
+	public Animation createExplosionAssets() {
+		Animation anim = null;
+		try{
+    	Image[] explosionAnim = {	new Image("resources/Explosion_S.png"), 
+				new Image("resources/Explosion_M.png"),
+				new Image("resources/Explosion_L.png"),
+				new Image("resources/Explosion_XL.png")};
+    		anim = new Animation(explosionAnim, 90);
+		} catch(Exception e) {
+			
+		}
+		anim.setLooping(false);
+		return anim;
+	}
+	
 	public Image getPlayerShipGraphic(ShipVector vector) {
 		return playerShip.get(vector);
 	}
@@ -80,5 +109,59 @@ public class GraphicsMarshal {
 	
 	public Image getTestCollidableGraphic() {
 		return testCollidable;
+	}
+	
+	/*
+	 ********************************************************************************************************
+	 * Animation & Image Queuer
+	 ********************************************************************************************************
+	*/
+	public List<Animation> getQueuedAnimations() {
+		return queuedAnimations;
+	}
+	
+	public List<Point> getQueuedAnimationCoordinates() {
+		return queuedAnimationCoordinates;
+	}
+	
+	public List<Image> getQueuedImages() {
+		return queuedImages;
+	}
+	
+	public void drawAnimationQueue() {
+		List<Animation> removalSetAnim = new ArrayList<Animation>();
+		List<Point> removalSetPoint = new ArrayList<Point>();
+		
+		for(int i=0; i < queuedAnimations.size(); i++) {
+			Animation anim = queuedAnimations.get(i);
+			Point point = queuedAnimationCoordinates.get(i);
+			anim.draw(point.getX(), point.getY());
+			
+			if(anim.isStopped()) {
+				removalSetAnim.add(anim);
+				removalSetPoint.add(point);
+			}
+		}
+		
+		queuedAnimations.removeAll(removalSetAnim);
+		queuedAnimationCoordinates.removeAll(removalSetPoint);
+		
+	}
+	
+	public void queueAnimation(Animation newAnimation, Point newPoint) {
+		queuedAnimations.push(newAnimation);
+		queuedAnimationCoordinates.push(newPoint);
+	}
+	
+	public void queueImage(Image newImage, Point newPoint) {
+		queuedImages.push(newImage);
+		queuedImageCoordinates.push(newPoint);
+	}
+	
+	public void clearQueues() {
+		queuedAnimations.clear();
+		queuedImages.clear();
+		queuedAnimationCoordinates.clear();
+		queuedImageCoordinates.clear();
 	}
 }

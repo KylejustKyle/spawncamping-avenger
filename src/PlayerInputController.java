@@ -51,6 +51,10 @@ public class PlayerInputController {
 	}
 	
 	private void consumeInFlightInput(MockPlayer player, int delta) {
+		//We don't want to run this consuming flight control logic if the player is dead.
+		if(!player.isAlive) {
+			return;
+		}
 		
         if(Keyboard.isKeyDown(Keyboard.KEY_S) && player.y+player.height < screenHeight) {
         	player.y += delta;

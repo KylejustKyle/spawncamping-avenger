@@ -16,6 +16,7 @@ public class CollisionMarshal {
 		for(CollidableObject collidableObject : collidableObjects.cObjects) {
 			if(collidableObject.boundingBox.intersects(player.boundingBox)) {
 				player.isAlive = false;
+				player.shouldExplode = true;
 				break;
 			}
 		}
