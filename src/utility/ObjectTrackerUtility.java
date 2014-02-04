@@ -1,5 +1,6 @@
 package utility;
 import projectiles.Projectile;
+import worldEntities.CollidableObject;
 import worldEntities.WorldObject;
 
 public class ObjectTrackerUtility {
@@ -8,6 +9,10 @@ public class ObjectTrackerUtility {
 	
 	// @TODO a lot of class heirarchy can go here to help make this more autowired.
 	public static boolean isOutsideOfWindow(WorldObject object) {
+		return isOutsideOfWindow(object.x, object.y);
+	}
+	
+	public static boolean isOutsideOfWindow(CollidableObject object) {
 		return isOutsideOfWindow(object.x, object.y);
 	}
 	

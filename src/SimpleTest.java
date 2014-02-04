@@ -9,6 +9,8 @@ import org.newdawn.slick.SlickException;
 import playerShip.MockPlayer;
 import projectiles.Projectile;
 import utility.IntervalTimer;
+import worldEntities.CollidableObject;
+import worldEntities.CollidableObjects;
 import worldEntities.WorldObject;
 import worldEntities.WorldObjects;
 
@@ -25,30 +27,39 @@ public class SimpleTest extends BasicGame {
 	private static PlayerInputController controller;
 	private static GameState currentState;
 	private static int burnFactor = 1;
-	private static WorldObjects worldObjects = null;
-	private static WorldProjectiles worldProjectiles = null;
+
 	private static boolean runAnimTest = false;
-	private static GraphicsMarshal gMarshal;
 	private static long distanceTravelled = 0;
+	
+	/*
+	 * Marshal Classes
+	 */
+	private static GraphicsMarshal gMarshal;
+	private static CollisionMarshal cMarshal;
+	
+	/*
+	 * World Containers
+	 */
+	private static WorldObjects worldObjects = null;
+	private static CollidableObjects collidableObjects = null;
+	private static WorldProjectiles worldProjectiles = null;
 	
 	private static IntervalTimer spawnTimer;
 	private static IntervalTimer distanceTimer;
 	
-	private static Animation jetIdle;
     public SimpleTest() {
         super("SimpleTest");
     }
     
     @Override
     public void init(GameContainer container) throws SlickException {
-    	Image[] idleAnim = {new Image("resources/AnimTest1.png"), new Image("resources/AnimTest2.png")};
-    	jetIdle = new Animation(idleAnim, 200);
     	
     	spawnTimer = new IntervalTimer(System.currentTimeMillis(), 1000);
     	distanceTimer = new IntervalTimer(System.currentTimeMillis(), 1000);
     	
     	app.getInput().disableKeyRepeat();
     	gMarshal = new GraphicsMarshal();
+    	cMarshal = new CollisionMarshal(collidableObjects, player);
     }
 
     // This is called on tick, in GameContainer.java updateAndRender
@@ -58,8 +69,11 @@ public class SimpleTest extends BasicGame {
             throws SlickException {
     	
     	currentState = controller.consumeInput(player, currentState, delta);
-    	worldObjects.pullObjectsDown(burnFactor, app.getHeight());
+    	worldObjects.updateObjects(burnFactor, app.getHeight());
+    	collidableObjects.updateObjects();
     	worldProjectiles.updateProjectiles();
+    	
+    	cMarshal.runCollision();
     	
     	// @TODO we want to move this logic out into a different class, or a delegate like structure
     	if(spawnTimer.isInterval()) {
@@ -90,11 +104,6 @@ public class SimpleTest extends BasicGame {
         renderObjects(g);
         renderProjectiles(g);
         renderDebugMenu(g);
-        
-        if(runAnimTest) {
-        	jetIdle.draw(100,100);
-        }
-
     }
     
     /**
@@ -110,19 +119,28 @@ public class SimpleTest extends BasicGame {
     	if(b == 'y') {
     		runAnimTest= true;
     	}
+    	
+    	if(b == 'r') {
+    		player.isAlive = true;
+    		player.x = 320;
+    		player.y = 240;
+    	}
     }
     
     public static void main(String[] args) {
         try {
         	
         	// Initialize game state
-            app = new AppGameContainer(new SimpleTest());
+            app 				= new AppGameContainer(new SimpleTest());
+        	player 				= new MockPlayer(app.getWidth()/2, app.getHeight()/2);
+        	controller 			= new PlayerInputController( app.getWidth(), app.getHeight());
+        	currentState 		=  GameState.IN_FLIGHT;
+        	worldObjects 		= new WorldObjects();
+        	worldProjectiles 	= new WorldProjectiles();
+        	collidableObjects 	= new CollidableObjects();
+        	collidableObjects.cObjects.add(new CollidableObject(300, 100, 100, 100));
+        	
             app.setTitle("Divergent Pancakes v0.0.1");
-        	player = new MockPlayer(app.getWidth()/2, app.getHeight()/2);
-        	controller = new PlayerInputController( app.getWidth(), app.getHeight());
-        	currentState =  GameState.IN_FLIGHT;
-        	worldObjects = new WorldObjects();
-        	worldProjectiles = new WorldProjectiles();
         	
         	// Start game loop
             app.start();
@@ -133,13 +151,21 @@ public class SimpleTest extends BasicGame {
     }
     
     private void renderPlayer(Graphics g) throws SlickException {
-    	gMarshal.getPlayerShipGraphic(player.vector).draw(player.x, player.y);
-    	gMarshal.getPlayerAfterburner(burnFactor).draw(player.x, player.y);
+    	if(player.isAlive) {
+    		gMarshal.getPlayerShipGraphic(player.vector).draw(player.x, player.y);
+    		gMarshal.getPlayerAfterburner(burnFactor).draw(player.x, player.y);
+    	} else {
+    		g.drawString("You died; press R to restart ", 300, 300);
+    	}
     }
     
     private void renderObjects(Graphics g) throws SlickException {
     	for(WorldObject worldObject : worldObjects.wObjects) {
     		gMarshal.getTrackingWallGraphic().draw(worldObject.x, worldObject.y);
+    	}
+    	
+    	for(CollidableObject collidableObject : collidableObjects.cObjects) {
+    		gMarshal.getTestCollidableGraphic().draw(collidableObject.x, collidableObject.y);
     	}
     }
     

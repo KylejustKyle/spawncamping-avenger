@@ -14,6 +14,7 @@ public class GraphicsMarshal {
 	public Image playerShipLeanRight;
 	
 	public Image trackingWall;
+	public Image testCollidable;
 	public Image playerBasicProjectile;
 	
 	public Animation jetAfterburnerTier1;
@@ -33,6 +34,7 @@ public class GraphicsMarshal {
 			playerShipLeanRight = new Image("resources/Jet_Lean_Right.png");
 			
 			trackingWall = new Image("resources/VerticalLine.png");
+			testCollidable = new Image("resources/Test.png");
 			playerBasicProjectile = new Image("resources/Projectile_Small.png");
 
 	    	Image[] aferburnerAnimT1 = {new Image("resources/Afterburner_1.png"), new Image("resources/Afterburner_2.png")};
@@ -74,5 +76,9 @@ public class GraphicsMarshal {
 	
 	public Animation getPlayerAfterburner(int burnFactor) {
 		return afterburner.get(AfterburnerType.values()[burnFactor]);
+	}
+	
+	public Image getTestCollidableGraphic() {
+		return testCollidable;
 	}
 }
