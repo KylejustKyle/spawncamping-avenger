@@ -87,11 +87,10 @@ public class SimpleTest extends BasicGame {
     	// Player ship died, run death routine
     	if(player.shouldExplode) {
     		gMarshal.queueAnimation(gMarshal.createExplosionAssets(), new Point(player.x, player.y));
+    		burnFactor = 0;
     		player.shouldExplode = false;
-    		player.boundingBox.setX(320);
-    		player.boundingBox.setY(240);
-    		player.x = 320;
-    		player.y = 240;
+    		spawnTimer.stop();
+    		distanceTimer.stop();
     	}
     	
     	// Check for exit status 
@@ -122,6 +121,11 @@ public class SimpleTest extends BasicGame {
     		player.isAlive = true;
     		player.x = 320;
     		player.y = 240;
+    		player.boundingBox.setX(320);
+    		player.boundingBox.setY(240);
+    		burnFactor = 1;
+    		spawnTimer.start();
+    		distanceTimer.start();
     	}
     }
     
