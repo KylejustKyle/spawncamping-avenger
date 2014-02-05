@@ -52,11 +52,11 @@ public class GraphicsMarshal {
 			playerBasicProjectile = new Image("resources/Projectile_Small.png");
 
 	    	Image[] aferburnerAnimT1 = {new Image("resources/Afterburner_1.png"), new Image("resources/Afterburner_2.png")};
-	    	jetAfterburnerTier1 = new Animation(aferburnerAnimT1, 200);
+	    	jetAfterburnerTier1 = new Animation(aferburnerAnimT1, 150);
 	    	Image[] aferburnerAnimT2 = {new Image("resources/Afterburner_1_T2.png"), new Image("resources/Afterburner_2_T2.png")};
-	    	jetAfterburnerTier2 = new Animation(aferburnerAnimT2, 200);
+	    	jetAfterburnerTier2 = new Animation(aferburnerAnimT2, 150);
 	    	Image[] aferburnerAnimT3 = {new Image("resources/Afterburner_1_T3.png"), new Image("resources/Afterburner_2_T3.png")};
-	    	jetAfterburnerTier3 = new Animation(aferburnerAnimT3, 200);
+	    	jetAfterburnerTier3 = new Animation(aferburnerAnimT3, 150);
 			
 			playerShip.put(ShipVector.LEFT, playerShipLeanLeft);
 			playerShip.put(ShipVector.RIGHT, playerShipLeanRight);

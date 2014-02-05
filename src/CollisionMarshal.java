@@ -13,11 +13,13 @@ public class CollisionMarshal {
 	}
 	
 	public void runCollision() {
-		for(CollidableObject collidableObject : collidableObjects.cObjects) {
-			if(collidableObject.boundingBox.intersects(player.boundingBox)) {
-				player.isAlive = false;
-				player.shouldExplode = true;
-				break;
+		if(player.isAlive) {
+			for(CollidableObject collidableObject : collidableObjects.cObjects) {
+				if(collidableObject.boundingBox.intersects(player.boundingBox)) {
+					player.isAlive = false;
+					player.shouldExplode = true;
+					break;
+				}
 			}
 		}
 	}
