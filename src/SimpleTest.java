@@ -2,15 +2,19 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.ShapeFill;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Point;
+import org.prototype.marshal.CollisionMarshal;
+import org.prototype.marshal.GraphicsMarshal;
 
 import playerShip.MockPlayer;
 import projectiles.Projectile;
+import projectiles.WorldProjectiles;
 import utility.IntervalTimer;
 import worldEntities.CollidableObject;
 import worldEntities.CollidableObjects;
+import worldEntities.EnemyObject;
+import worldEntities.EnemyObjects;
 import worldEntities.WorldObject;
 import worldEntities.WorldObjects;
 
@@ -40,9 +44,11 @@ public class SimpleTest extends BasicGame {
 	private static WorldObjects worldObjects = null;
 	private static CollidableObjects collidableObjects = null;
 	private static WorldProjectiles worldProjectiles = null;
+	private static EnemyObjects enemyObjects = null;
 	
 	private static IntervalTimer spawnTimer;
 	private static IntervalTimer distanceTimer;
+	private static IntervalTimer enemyTimer;
 	
     public SimpleTest() {
         super("SimpleTest");
@@ -51,12 +57,13 @@ public class SimpleTest extends BasicGame {
     @Override
     public void init(GameContainer container) throws SlickException {
     	
-    	spawnTimer = new IntervalTimer(System.currentTimeMillis(), 1000);
-    	distanceTimer = new IntervalTimer(System.currentTimeMillis(), 1000);
+    	spawnTimer = new IntervalTimer(1000);
+    	distanceTimer = new IntervalTimer(1000);
+    	enemyTimer = new IntervalTimer(5000);
     	
     	app.getInput().disableKeyRepeat();
     	gMarshal = new GraphicsMarshal();
-    	cMarshal = new CollisionMarshal(collidableObjects, player);
+    	cMarshal = new CollisionMarshal(collidableObjects, enemyObjects, worldProjectiles, player);
     }
 
     // This is called on tick, in GameContainer.java updateAndRender
@@ -68,9 +75,10 @@ public class SimpleTest extends BasicGame {
     	currentState = controller.consumeInput(player, currentState, delta);
     	worldObjects.updateObjects(burnFactor, app.getHeight());
     	collidableObjects.updateObjects();
+    	enemyObjects.updateObects();
     	worldProjectiles.updateProjectiles();
     	
-    	cMarshal.runCollision();
+    	cMarshal.runCollision(gMarshal);
     	
     	// @TODO we want to move this logic out into a different class, or a delegate like structure
     	if(spawnTimer.isInterval()) {
@@ -84,6 +92,11 @@ public class SimpleTest extends BasicGame {
     		distanceTimer.rootTime = System.currentTimeMillis();
     	}
     	
+    	if(enemyTimer.isInterval()) {
+    		enemyObjects.eObjects.add(new EnemyObject(200, 200, 50, 50));
+    		enemyTimer.rootTime = System.currentTimeMillis();
+    	}
+    	
     	// Player ship died, run death routine
     	if(player.shouldExplode) {
     		gMarshal.queueAnimation(gMarshal.createExplosionAssets(), new Point(player.x, player.y));
@@ -91,6 +104,7 @@ public class SimpleTest extends BasicGame {
     		player.shouldExplode = false;
     		spawnTimer.stop();
     		distanceTimer.stop();
+    		enemyTimer.stop();
     	}
     	
     	// Check for exit status 
@@ -114,7 +128,7 @@ public class SimpleTest extends BasicGame {
     	}
     	
     	if(b == 'h') {
-    		isDebugMode= (isDebugMode ? false : true );
+    		isDebugMode = (isDebugMode ? false : true );
     	}
     	
     	if(b == 'r') {
@@ -126,6 +140,7 @@ public class SimpleTest extends BasicGame {
     		burnFactor = 1;
     		spawnTimer.start();
     		distanceTimer.start();
+    		enemyTimer.start();
     	}
     }
     
@@ -139,6 +154,7 @@ public class SimpleTest extends BasicGame {
         	currentState 		=  GameState.IN_FLIGHT;
         	worldObjects 		= new WorldObjects();
         	worldProjectiles 	= new WorldProjectiles();
+        	enemyObjects 		= new EnemyObjects();
         	collidableObjects 	= new CollidableObjects();
         	collidableObjects.cObjects.add(new CollidableObject(300, 100, 50, 50));
         	
@@ -193,6 +209,10 @@ public class SimpleTest extends BasicGame {
     	for(CollidableObject collidableObject : collidableObjects.cObjects) {
     		gMarshal.getTestCollidableGraphic().draw(collidableObject.x, collidableObject.y);
     	}
+    	
+    	for(EnemyObject enemyObject : enemyObjects.eObjects) {
+    		gMarshal.getTestCollidableGraphic().draw(enemyObject.x, enemyObject.y);
+    	}
     }
     
     private void renderProjectiles(Graphics g) throws SlickException {
@@ -206,9 +226,10 @@ public class SimpleTest extends BasicGame {
         g.drawString("WorldObjectCount: "+worldObjects.wObjects.size(), 0, 55);
         g.drawString("WorldProjectileCount: "+worldProjectiles.wProjectiles.size(), 0, 70);
         g.drawString("CollidableObjectCount: "+collidableObjects.cObjects.size(), 0, 85);
-        g.drawString("DistanceTravelled: "+distanceTravelled, 0, 100);
-        g.drawString("DebugMode (h)", 0, 115);
-        g.drawString("Reset Player (r)", 0, 130);
+        g.drawString("EnemyObjectCount: "+enemyObjects.eObjects.size(), 0, 100);
+        g.drawString("DistanceTravelled: "+distanceTravelled, 0, 115);
+        g.drawString("DebugMode (h)", 0, 130);
+        g.drawString("Reset Player (r)", 0, 145);
     }
     
     private void renderBoundingBoxes(Graphics g) {
@@ -216,6 +237,14 @@ public class SimpleTest extends BasicGame {
     	
     	for(CollidableObject collidableObject : collidableObjects.cObjects) {
     		g.draw(collidableObject.boundingBox);
+    	}
+    	
+    	for(EnemyObject enemyObject : enemyObjects.eObjects) {
+    		g.draw(enemyObject.boundingBox);
+    	}
+    	
+    	for(Projectile projectile : worldProjectiles.wProjectiles) {
+    		g.draw(projectile.boundingBox);
     	}
     }
 }

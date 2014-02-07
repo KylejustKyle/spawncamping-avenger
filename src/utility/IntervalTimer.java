@@ -6,8 +6,8 @@ public class IntervalTimer {
 	public long stoppedProgress;
 	public boolean isStopped;
 	
-	public IntervalTimer(long newRootTime, long newInterval) {
-		rootTime = newRootTime;
+	public IntervalTimer(long newInterval) {
+		rootTime = System.currentTimeMillis();
 		interval = newInterval;
 		stoppedProgress = 0;
 		isStopped = false;
