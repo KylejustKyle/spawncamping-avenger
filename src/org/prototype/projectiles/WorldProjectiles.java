@@ -1,10 +1,10 @@
+package org.prototype.projectiles;
 import java.util.ArrayList;
 
-import projectiles.Projectile;
-import utility.ObjectTrackerUtility;
+import org.prototype.utility.ObjectTrackerUtility;
 
 public class WorldProjectiles {
-	ArrayList<Projectile> wProjectiles = null;
+	public ArrayList<Projectile> wProjectiles = null;
 	
 	public WorldProjectiles() {
 		wProjectiles = new ArrayList<Projectile>();

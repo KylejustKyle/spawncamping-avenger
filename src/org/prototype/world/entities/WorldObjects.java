@@ -1,7 +1,7 @@
-package worldEntities;
+package org.prototype.world.entities;
 import java.util.ArrayList;
 
-import utility.ObjectTrackerUtility;
+import org.prototype.utility.ObjectTrackerUtility;
 
 
 public class WorldObjects {

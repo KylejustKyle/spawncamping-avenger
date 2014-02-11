@@ -1,4 +1,4 @@
-package playerShip;
+package org.prototype.player;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
