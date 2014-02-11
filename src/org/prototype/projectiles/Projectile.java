@@ -1,4 +1,4 @@
-package projectiles;
+package org.prototype.projectiles;
 
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;

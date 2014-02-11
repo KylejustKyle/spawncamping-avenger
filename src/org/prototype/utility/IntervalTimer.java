@@ -1,4 +1,4 @@
-package utility;
+package org.prototype.utility;
 
 public class IntervalTimer {
 	public long rootTime;

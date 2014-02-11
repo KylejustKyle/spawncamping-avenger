@@ -1,4 +1,4 @@
-package projectiles;
+package org.prototype.projectiles;
 
 
 public class VerticalProjectile extends Projectile{

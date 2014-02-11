@@ -1,9 +1,8 @@
 import org.lwjgl.input.Keyboard;
-
-import playerShip.MockPlayer;
-import playerShip.ShipVector;
-import projectiles.VerticalProjectile;
-import projectiles.WorldProjectiles;
+import org.prototype.player.MockPlayer;
+import org.prototype.player.ShipVector;
+import org.prototype.projectiles.VerticalProjectile;
+import org.prototype.projectiles.WorldProjectiles;
 
 
 

@@ -4,19 +4,20 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Point;
+import org.prototype.globals.GlobalConfig;
 import org.prototype.marshal.CollisionMarshal;
 import org.prototype.marshal.GraphicsMarshal;
-
-import playerShip.MockPlayer;
-import projectiles.Projectile;
-import projectiles.WorldProjectiles;
-import utility.IntervalTimer;
-import worldEntities.CollidableObject;
-import worldEntities.CollidableObjects;
-import worldEntities.EnemyObject;
-import worldEntities.EnemyObjects;
-import worldEntities.WorldObject;
-import worldEntities.WorldObjects;
+import org.prototype.player.MockPlayer;
+import org.prototype.projectiles.Projectile;
+import org.prototype.projectiles.WorldProjectiles;
+import org.prototype.utility.IntervalTimer;
+import org.prototype.utility.SpawnerUtility;
+import org.prototype.world.entities.CollidableObject;
+import org.prototype.world.entities.CollidableObjects;
+import org.prototype.world.entities.EnemyObject;
+import org.prototype.world.entities.EnemyObjects;
+import org.prototype.world.entities.WorldObject;
+import org.prototype.world.entities.WorldObjects;
 
 public class SimpleTest extends BasicGame {
 
@@ -49,6 +50,7 @@ public class SimpleTest extends BasicGame {
 	private static IntervalTimer spawnTimer;
 	private static IntervalTimer distanceTimer;
 	private static IntervalTimer enemyTimer;
+	private static IntervalTimer collidableTimer;
 	
     public SimpleTest() {
         super("SimpleTest");
@@ -60,6 +62,7 @@ public class SimpleTest extends BasicGame {
     	spawnTimer = new IntervalTimer(1000);
     	distanceTimer = new IntervalTimer(1000);
     	enemyTimer = new IntervalTimer(5000);
+    	collidableTimer = new IntervalTimer(1400);
     	
     	app.getInput().disableKeyRepeat();
     	gMarshal = new GraphicsMarshal();
@@ -83,8 +86,8 @@ public class SimpleTest extends BasicGame {
     	// @TODO we want to move this logic out into a different class, or a delegate like structure
     	if(spawnTimer.isInterval()) {
     		spawnTimer.rootTime = System.currentTimeMillis();
-    		worldObjects.wObjects.add(new WorldObject(20, 0));
-    		worldObjects.wObjects.add(new WorldObject(620, 0));
+    		worldObjects.wObjects.add(new WorldObject(0, 0));
+    		worldObjects.wObjects.add(new WorldObject(GlobalConfig.GAME_WIDTH-20, 0));
     	}
     	
     	if(distanceTimer.isInterval()) {
@@ -93,13 +96,31 @@ public class SimpleTest extends BasicGame {
     	}
     	
     	if(enemyTimer.isInterval()) {
-    		enemyObjects.eObjects.add(new EnemyObject(200, 200, 50, 50));
+    		enemyObjects.eObjects.add(
+    				new EnemyObject(SpawnerUtility.generateConstrainedPoint(0, 200, 0, GlobalConfig.GAME_WIDTH),
+    								50,
+    								50,
+    								1,
+    								0,
+    								1,
+    								0));
     		enemyTimer.rootTime = System.currentTimeMillis();
+    	}
+    	
+    	if(collidableTimer.isInterval()) {
+        	collidableObjects.cObjects.add(new CollidableObject(SpawnerUtility.generateConstrainedPoint(0, 200, 0, GlobalConfig.GAME_WIDTH),
+				     50,
+				     50, 
+				     0, 
+				     1,
+				     0, 
+				     1));
+        	collidableTimer.rootTime = System.currentTimeMillis();
     	}
     	
     	// Player ship died, run death routine
     	if(player.shouldExplode) {
-    		gMarshal.queueAnimation(gMarshal.createExplosionAssets(), new Point(player.x, player.y));
+    		gMarshal.queueAnimation(gMarshal.createMediumExplosionAssets(), new Point(player.x, player.y));
     		burnFactor = 0;
     		player.shouldExplode = false;
     		spawnTimer.stop();
@@ -149,6 +170,8 @@ public class SimpleTest extends BasicGame {
         	
         	// Initialize game state
             app 				= new AppGameContainer(new SimpleTest());
+        	app.setDisplayMode(GlobalConfig.GAME_WIDTH, GlobalConfig.GAME_HEIGHT, false);
+        	
         	player 				= new MockPlayer(app.getWidth()/2, app.getHeight()/2);
         	controller 			= new PlayerInputController( app.getWidth(), app.getHeight());
         	currentState 		=  GameState.IN_FLIGHT;
@@ -156,7 +179,8 @@ public class SimpleTest extends BasicGame {
         	worldProjectiles 	= new WorldProjectiles();
         	enemyObjects 		= new EnemyObjects();
         	collidableObjects 	= new CollidableObjects();
-        	collidableObjects.cObjects.add(new CollidableObject(300, 100, 50, 50));
+
+        	System.out.println(app.getWidth()+"   "+app.getHeight());
         	
             app.setTitle("Divergent Pancakes v0.0.1");
         	
@@ -211,7 +235,7 @@ public class SimpleTest extends BasicGame {
     	}
     	
     	for(EnemyObject enemyObject : enemyObjects.eObjects) {
-    		gMarshal.getTestCollidableGraphic().draw(enemyObject.x, enemyObject.y);
+    		gMarshal.getTestEnemyGraphic().draw(enemyObject.x, enemyObject.y);
     	}
     }
     

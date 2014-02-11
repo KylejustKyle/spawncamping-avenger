@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Stack;
 
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Point;
-
-import playerShip.AfterburnerType;
-import playerShip.ShipVector;
+import org.prototype.player.AfterburnerType;
+import org.prototype.player.ShipVector;
 
 
 public class GraphicsMarshal {
@@ -21,6 +21,7 @@ public class GraphicsMarshal {
 	public Image trackingWall;
 	public Image testCollidable;
 	public Image playerBasicProjectile;
+	public Image testEnemy;
 	
 	public Animation jetAfterburnerTier1;
 	public Animation jetAfterburnerTier2;
@@ -49,7 +50,8 @@ public class GraphicsMarshal {
 			playerShipLeanRight = new Image("resources/Jet_Lean_Right.png");
 			
 			trackingWall = new Image("resources/VerticalLine.png");
-			testCollidable = new Image("resources/Test2.png");
+			testCollidable = new Image("resources/Collidable.png");
+			testEnemy = new Image("resources/Test2.png");
 			playerBasicProjectile = new Image("resources/Projectile_Small.png");
 
 	    	Image[] aferburnerAnimT1 = {new Image("resources/Afterburner_1.png"), new Image("resources/Afterburner_2.png")};
@@ -80,11 +82,60 @@ public class GraphicsMarshal {
 	public Animation createExplosionAssets() {
 		Animation anim = null;
 		try{
-    	Image[] explosionAnim = {	new Image("resources/Explosion_S.png"), 
-				new Image("resources/Explosion_M.png"),
-				new Image("resources/Explosion_L.png"),
-				new Image("resources/Explosion_XL.png")};
-    		anim = new Animation(explosionAnim, 80);
+			Image small = new Image("resources/Explosion_S.png");
+			Image smallR = new Image("resources/Explosion_S.png");
+			smallR.rotate(45);
+//			Image med = new Image("resources/Explosion_M.png");
+//			Image medR = new Image("resources/Explosion_M.png");
+//			Image large = new Image("resources/Explosion_L.png");
+//			Image largeR = new Image("resources/Explosion_L.png");
+//			Image xLarge = new Image("resources/Explosion_XL.png");
+//			Image xLargeR = new Image("resources/Explosion_XL.png");
+//			
+//			smallR.rotate(45);
+//			medR.rotate(45);
+//			largeR.rotate(45);
+//			xLargeR.rotate(45);
+			
+    	Image[] explosionAnim = {
+    			small,
+    			smallR,
+    			small,
+    			smallR};
+    	
+    		anim = new Animation(explosionAnim, 70);
+		} catch(Exception e) {
+			
+		}
+		anim.setLooping(false);
+		return anim;
+	}
+	
+	public Animation createMediumExplosionAssets() {
+		Animation anim = null;
+		try{
+			Image med = new Image("resources/Explosion_M.png");
+			Image medR = new Image("resources/Explosion_M.png");
+			medR.rotate(45);
+//			Image med = new Image("resources/Explosion_M.png");
+//			Image medR = new Image("resources/Explosion_M.png");
+//			Image large = new Image("resources/Explosion_L.png");
+//			Image largeR = new Image("resources/Explosion_L.png");
+//			Image xLarge = new Image("resources/Explosion_XL.png");
+//			Image xLargeR = new Image("resources/Explosion_XL.png");
+//			
+//			smallR.rotate(45);
+//			medR.rotate(45);
+//			largeR.rotate(45);
+//			xLargeR.rotate(45);
+			
+    	Image[] explosionAnim = {
+    			med,
+    			medR,
+    			med,
+    			medR};
+    	
+    		anim = new Animation(explosionAnim, 90);
 		} catch(Exception e) {
 			
 		}
@@ -165,5 +216,9 @@ public class GraphicsMarshal {
 		queuedImages.clear();
 		queuedAnimationCoordinates.clear();
 		queuedImageCoordinates.clear();
+	}
+
+	public Image getTestEnemyGraphic() {
+		return testEnemy;
 	}
 }

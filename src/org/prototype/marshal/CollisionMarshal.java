@@ -2,14 +2,13 @@ package org.prototype.marshal;
 import java.util.ArrayList;
 
 import org.newdawn.slick.geom.Point;
-
-import playerShip.MockPlayer;
-import projectiles.Projectile;
-import projectiles.WorldProjectiles;
-import worldEntities.CollidableObject;
-import worldEntities.CollidableObjects;
-import worldEntities.EnemyObject;
-import worldEntities.EnemyObjects;
+import org.prototype.player.MockPlayer;
+import org.prototype.projectiles.Projectile;
+import org.prototype.projectiles.WorldProjectiles;
+import org.prototype.world.entities.CollidableObject;
+import org.prototype.world.entities.CollidableObjects;
+import org.prototype.world.entities.EnemyObject;
+import org.prototype.world.entities.EnemyObjects;
 
 
 public class CollisionMarshal {
