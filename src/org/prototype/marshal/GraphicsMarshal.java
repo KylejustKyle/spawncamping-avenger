@@ -49,7 +49,7 @@ public class GraphicsMarshal {
 			playerShipLeanLeft = new Image("resources/Jet_Lean_Left.png");
 			playerShipLeanRight = new Image("resources/Jet_Lean_Right.png");
 			
-			trackingWall = new Image("resources/VerticalLine.png");
+			trackingWall = new Image("resources/Edge.png");
 			testCollidable = new Image("resources/Collidable.png");
 			testEnemy = new Image("resources/Test2.png");
 			playerBasicProjectile = new Image("resources/Projectile_Small.png");
@@ -189,7 +189,6 @@ public class GraphicsMarshal {
 			Animation anim = queuedAnimations.get(i);
 			Point point = queuedAnimationCoordinates.get(i);
 			anim.draw(point.getX(), point.getY());
-			
 			if(anim.isStopped()) {
 				removalSetAnim.add(anim);
 				removalSetPoint.add(point);
