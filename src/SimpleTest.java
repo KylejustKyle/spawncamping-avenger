@@ -67,6 +67,8 @@ public class SimpleTest extends BasicGame {
     	app.getInput().disableKeyRepeat();
     	gMarshal = new GraphicsMarshal();
     	cMarshal = new CollisionMarshal(collidableObjects, enemyObjects, worldProjectiles, player);
+		worldObjects.wObjects.add(new WorldObject(0, -GlobalConfig.GAME_HEIGHT));
+		worldObjects.wObjects.add(new WorldObject(GlobalConfig.GAME_WIDTH-20, -GlobalConfig.GAME_HEIGHT));
     }
 
     // This is called on tick, in GameContainer.java updateAndRender
@@ -82,13 +84,6 @@ public class SimpleTest extends BasicGame {
     	worldProjectiles.updateProjectiles();
     	
     	cMarshal.runCollision(gMarshal);
-    	
-    	// @TODO we want to move this logic out into a different class, or a delegate like structure
-    	if(spawnTimer.isInterval()) {
-    		spawnTimer.rootTime = System.currentTimeMillis();
-    		worldObjects.wObjects.add(new WorldObject(0, 0));
-    		worldObjects.wObjects.add(new WorldObject(GlobalConfig.GAME_WIDTH-20, 0));
-    	}
     	
     	if(distanceTimer.isInterval()) {
     		distanceTravelled += ((System.currentTimeMillis() - distanceTimer.rootTime)/1000) * burnFactor;
@@ -108,7 +103,7 @@ public class SimpleTest extends BasicGame {
     	}
     	
     	if(collidableTimer.isInterval()) {
-        	collidableObjects.cObjects.add(new CollidableObject(SpawnerUtility.generateConstrainedPoint(0, 200, 0, GlobalConfig.GAME_WIDTH),
+        	collidableObjects.cObjects.add(new CollidableObject(SpawnerUtility.generateConstrainedPoint(0, 1, 0, GlobalConfig.GAME_WIDTH),
 				     50,
 				     50, 
 				     0, 
@@ -246,14 +241,14 @@ public class SimpleTest extends BasicGame {
     }
     
     private void renderDebugMenu(Graphics g) {
-        g.drawString("BurnFactor: "+burnFactor, 0, 40);
-        g.drawString("WorldObjectCount: "+worldObjects.wObjects.size(), 0, 55);
-        g.drawString("WorldProjectileCount: "+worldProjectiles.wProjectiles.size(), 0, 70);
-        g.drawString("CollidableObjectCount: "+collidableObjects.cObjects.size(), 0, 85);
-        g.drawString("EnemyObjectCount: "+enemyObjects.eObjects.size(), 0, 100);
-        g.drawString("DistanceTravelled: "+distanceTravelled, 0, 115);
-        g.drawString("DebugMode (h)", 0, 130);
-        g.drawString("Reset Player (r)", 0, 145);
+        g.drawString("BurnFactor: "+burnFactor, 25, 40);
+        g.drawString("WorldObjectCount: "+worldObjects.wObjects.size(), 25, 55);
+        g.drawString("WorldProjectileCount: "+worldProjectiles.wProjectiles.size(), 25, 70);
+        g.drawString("CollidableObjectCount: "+collidableObjects.cObjects.size(), 25, 85);
+        g.drawString("EnemyObjectCount: "+enemyObjects.eObjects.size(), 25, 100);
+        g.drawString("DistanceTravelled: "+distanceTravelled, 25, 115);
+        g.drawString("DebugMode (h)", 25, 130);
+        g.drawString("Reset Player (r)", 25, 145);
     }
     
     private void renderBoundingBoxes(Graphics g) {
