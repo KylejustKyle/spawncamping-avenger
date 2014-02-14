@@ -22,6 +22,7 @@ public class GraphicsMarshal {
 	public Image testCollidable;
 	public Image playerBasicProjectile;
 	public Image testEnemy;
+	public Image background;
 	
 	public Animation jetAfterburnerTier1;
 	public Animation jetAfterburnerTier2;
@@ -48,7 +49,7 @@ public class GraphicsMarshal {
 			playerShipIdle = new Image("resources/Jet_A.png");
 			playerShipLeanLeft = new Image("resources/Jet_Lean_Left.png");
 			playerShipLeanRight = new Image("resources/Jet_Lean_Right.png");
-			
+			background = new Image("resources/background1.png");
 			trackingWall = new Image("resources/Edge.png");
 			testCollidable = new Image("resources/Collidable.png");
 			testEnemy = new Image("resources/Test2.png");

@@ -77,7 +77,7 @@ public class SimpleTest extends BasicGame {
     public void update(GameContainer container, int delta)
             throws SlickException {
     	
-    	currentState = controller.consumeInput(player, currentState, delta);
+    	currentState = controller.consumeInput(player, currentState, delta, worldProjectiles);
     	worldObjects.updateObjects(burnFactor, app.getHeight());
     	collidableObjects.updateObjects();
     	enemyObjects.updateObects();
@@ -194,6 +194,7 @@ public class SimpleTest extends BasicGame {
     // This is called after update.
     @Override
     public void render(GameContainer container, Graphics g) throws SlickException {
+    	renderBackground(g);
         renderPlayer(g);
         renderGraphicsMarshalQueues();
         renderObjects(g);
@@ -203,6 +204,10 @@ public class SimpleTest extends BasicGame {
         if(isDebugMode) {
         	renderBoundingBoxes(g);
         }
+    }
+    
+    private void renderBackground(Graphics g) throws SlickException {
+    	gMarshal.background.draw(0, 0);
     }
     
     private void renderPlayer(Graphics g) throws SlickException {
