@@ -2,6 +2,7 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Point;
 import org.prototype.globals.GlobalConfig;
@@ -69,6 +70,9 @@ public class SimpleTest extends BasicGame {
     	cMarshal = new CollisionMarshal(collidableObjects, enemyObjects, worldProjectiles, player);
 		worldObjects.wObjects.add(new WorldObject(0, -GlobalConfig.GAME_HEIGHT));
 		worldObjects.wObjects.add(new WorldObject(GlobalConfig.GAME_WIDTH-20, -GlobalConfig.GAME_HEIGHT));
+		
+		   Music openingMenuMusic = new Music("resources/23_-_bloody_battle.ogg");
+		    openingMenuMusic.loop();
     }
 
     // This is called on tick, in GameContainer.java updateAndRender
@@ -107,7 +111,7 @@ public class SimpleTest extends BasicGame {
 				     0, 
 				     1,
 				     0, 
-				     1));
+				     1*burnFactor));
         	collidableTimer.rootTime = System.currentTimeMillis();
     	}
     	
@@ -164,7 +168,6 @@ public class SimpleTest extends BasicGame {
         	// Initialize game state
             app 				= new AppGameContainer(new SimpleTest());
         	app.setDisplayMode(GlobalConfig.GAME_WIDTH, GlobalConfig.GAME_HEIGHT, false);
-        	
         	player 				= new MockPlayer(app.getWidth()/2, app.getHeight()/2);
         	controller 			= new PlayerInputController( app.getWidth(), app.getHeight());
         	currentState 		=  GameState.IN_FLIGHT;
