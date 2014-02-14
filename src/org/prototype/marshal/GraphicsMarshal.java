@@ -83,21 +83,8 @@ public class GraphicsMarshal {
 		Animation anim = null;
 		try{
 			Image small = new Image("resources/Explosion_S.png");
-			Image smallR = new Image("resources/Explosion_S.png");
-			smallR.rotate(45);
-//			Image med = new Image("resources/Explosion_M.png");
-//			Image medR = new Image("resources/Explosion_M.png");
-//			Image large = new Image("resources/Explosion_L.png");
-//			Image largeR = new Image("resources/Explosion_L.png");
-//			Image xLarge = new Image("resources/Explosion_XL.png");
-//			Image xLargeR = new Image("resources/Explosion_XL.png");
-//			
-//			smallR.rotate(45);
-//			medR.rotate(45);
-//			largeR.rotate(45);
-//			xLargeR.rotate(45);
-			
-    	Image[] explosionAnim = {
+			Image smallR = new Image("resources/Explosion_M.png");
+			Image[] explosionAnim = {
     			small,
     			smallR,
     			small,
@@ -115,21 +102,8 @@ public class GraphicsMarshal {
 		Animation anim = null;
 		try{
 			Image med = new Image("resources/Explosion_M.png");
-			Image medR = new Image("resources/Explosion_M.png");
-			medR.rotate(45);
-//			Image med = new Image("resources/Explosion_M.png");
-//			Image medR = new Image("resources/Explosion_M.png");
-//			Image large = new Image("resources/Explosion_L.png");
-//			Image largeR = new Image("resources/Explosion_L.png");
-//			Image xLarge = new Image("resources/Explosion_XL.png");
-//			Image xLargeR = new Image("resources/Explosion_XL.png");
-//			
-//			smallR.rotate(45);
-//			medR.rotate(45);
-//			largeR.rotate(45);
-//			xLargeR.rotate(45);
-			
-    	Image[] explosionAnim = {
+			Image medR = new Image("resources/Explosion_S.png");
+			Image[] explosionAnim = {
     			med,
     			medR,
     			med,

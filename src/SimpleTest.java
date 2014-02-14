@@ -31,7 +31,7 @@ public class SimpleTest extends BasicGame {
 	private static int burnFactor = 1;
 
 	private static boolean isDebugMode = false;
-	private static long distanceTravelled = 0;
+	private static double distanceTravelled = 0;
 	
 	/*
 	 * Marshal Classes
@@ -85,10 +85,8 @@ public class SimpleTest extends BasicGame {
     	
     	cMarshal.runCollision(gMarshal);
     	
-    	if(distanceTimer.isInterval()) {
-    		distanceTravelled += ((System.currentTimeMillis() - distanceTimer.rootTime)/1000) * burnFactor;
-    		distanceTimer.rootTime = System.currentTimeMillis();
-    	}
+    	distanceTravelled += (((System.currentTimeMillis()-distanceTimer.rootTime)/1000.0)*burnFactor);
+    	distanceTimer.rootTime = System.currentTimeMillis();
     	
     	if(enemyTimer.isInterval()) {
     		enemyObjects.eObjects.add(
