@@ -1,5 +1,6 @@
 package org.prototype.utility;
 import org.prototype.projectiles.Projectile;
+import org.prototype.world.entities.Background;
 import org.prototype.world.entities.CollidableObject;
 import org.prototype.world.entities.WorldObject;
 
@@ -9,6 +10,10 @@ public class ObjectTrackerUtility {
 	
 	// @TODO a lot of class heirarchy can go here to help make this more autowired.
 	public static boolean isOutsideOfWindow(WorldObject object) {
+		return isLeavingBottom(object.x, object.y);
+	}
+	
+	public static boolean isOutsideOfWindow(Background object) {
 		return isLeavingBottom(object.x, object.y);
 	}
 	

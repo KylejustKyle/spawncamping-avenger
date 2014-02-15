@@ -16,7 +16,7 @@ public class PlayerInputController {
 	public PlayerInputController(int screenWidth, int screenHeight) {
 		this.screenHeight = screenHeight;
 		this.screenWidth = screenWidth;
-		inputTimer = new IntervalTimer(200);
+		inputTimer = new IntervalTimer(100);
 	}
 	
 	public GameState consumeInput(MockPlayer player, GameState currentState, int delta, WorldProjectiles wProjectiles) {
