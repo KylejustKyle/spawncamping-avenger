@@ -1,3 +1,12 @@
 Asset for lean left and lean right need work. Better transform and better shading.
 
 -- Shooting lighting on ship and muzzle flash.
+
+
+Prevent respawn until after explosion animation is completed
+Shading wings on tilt
+Debug: average framerate analysis, write out to file
+Border collision for AI units, routine to change movement on collision
+Light trail
+refactor WorldObjects classes to use shared scrolling logic
+Map XML/data representation
