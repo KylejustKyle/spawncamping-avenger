@@ -52,7 +52,7 @@ public class GraphicsMarshal {
 			background = new Image("resources/background1.png");
 			trackingWall = new Image("resources/Edge.png");
 			testCollidable = new Image("resources/Collidable.png");
-			testEnemy = new Image("resources/Test2.png");
+			testEnemy = new Image("resources/enemy.png");
 			playerBasicProjectile = new Image("resources/Projectile_Small.png");
 
 	    	Image[] aferburnerAnimT1 = {new Image("resources/Afterburner_1.png"), new Image("resources/Afterburner_2.png")};

@@ -6,17 +6,17 @@ import org.newdawn.slick.geom.Shape;
 import org.prototype.globals.GlobalConfig;
 
 public class CollidableObject extends WorldObject {
-	public int width;
-	public int height;
-	public int xAxisVector;
-	public int yAxisVector;
-	public int xVelocity;
-	public int yVelocity;
+	public float width;
+	public float height;
+	public float xAxisVector;
+	public float yAxisVector;
+	public float xVelocity;
+	public float yVelocity;
 	public Shape boundingBox;
 	
 	// @TODO we need to change the way which we pass in the vector & velocity maps, should be a helper object that reduces the 
 	// long parameter list smell
-	public CollidableObject(Point position, int width, int height, int xAxisVector, int yAxisVector, int xVelocity, int yVelocity) {
+	public CollidableObject(Point position, float width, float height, float xAxisVector, float yAxisVector, float xVelocity, float yVelocity) {
 		super(position.getX(), position.getY());
 		boundingBox = new Rectangle(position.getX(), position.getY(), width, height);
 		this.xAxisVector = xAxisVector;
@@ -26,7 +26,7 @@ public class CollidableObject extends WorldObject {
 	}
 	
 	public void updateLocation() {
-		int locationY = yVelocity * yAxisVector;
+		float locationY = yVelocity * yAxisVector;
 		this.y += locationY;
 		//@TODO this needs to be autowired together with the x & y cooridnates
 		this.boundingBox.setY(this.y);

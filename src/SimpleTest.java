@@ -2,7 +2,6 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Point;
 import org.prototype.globals.GlobalConfig;
@@ -13,12 +12,14 @@ import org.prototype.projectiles.Projectile;
 import org.prototype.projectiles.WorldProjectiles;
 import org.prototype.utility.IntervalTimer;
 import org.prototype.utility.SpawnerUtility;
+import org.prototype.world.entities.Background;
 import org.prototype.world.entities.CollidableObject;
 import org.prototype.world.entities.CollidableObjects;
 import org.prototype.world.entities.EnemyObject;
 import org.prototype.world.entities.EnemyObjects;
 import org.prototype.world.entities.WorldObject;
 import org.prototype.world.entities.WorldObjects;
+import org.prototype.world.streamer.WorldStreamer;
 
 public class SimpleTest extends BasicGame {
 
@@ -47,6 +48,7 @@ public class SimpleTest extends BasicGame {
 	private static CollidableObjects collidableObjects = null;
 	private static WorldProjectiles worldProjectiles = null;
 	private static EnemyObjects enemyObjects = null;
+	private static WorldStreamer ws = null;
 	
 	private static IntervalTimer spawnTimer;
 	private static IntervalTimer distanceTimer;
@@ -71,8 +73,8 @@ public class SimpleTest extends BasicGame {
 		worldObjects.wObjects.add(new WorldObject(0, -GlobalConfig.GAME_HEIGHT));
 		worldObjects.wObjects.add(new WorldObject(GlobalConfig.GAME_WIDTH-20, -GlobalConfig.GAME_HEIGHT));
 		
-		   Music openingMenuMusic = new Music("resources/23_-_bloody_battle.ogg");
-		    openingMenuMusic.loop();
+		//Music openingMenuMusic = new Music("resources/23_-_bloody_battle.ogg");
+		//openingMenuMusic.loop();
     }
 
     // This is called on tick, in GameContainer.java updateAndRender
@@ -86,6 +88,7 @@ public class SimpleTest extends BasicGame {
     	collidableObjects.updateObjects();
     	enemyObjects.updateObects();
     	worldProjectiles.updateProjectiles();
+    	ws.updateBackgrounds(burnFactor);
     	
     	cMarshal.runCollision(gMarshal);
     	
@@ -104,6 +107,9 @@ public class SimpleTest extends BasicGame {
     		enemyTimer.rootTime = System.currentTimeMillis();
     	}
     	
+    	//@TODO hack fix, address this
+    	int speed = (burnFactor > 0 ? burnFactor : 1);
+    	
     	if(collidableTimer.isInterval()) {
         	collidableObjects.cObjects.add(new CollidableObject(SpawnerUtility.generateConstrainedPoint(0, 1, 0, GlobalConfig.GAME_WIDTH),
 				     50,
@@ -111,7 +117,7 @@ public class SimpleTest extends BasicGame {
 				     0, 
 				     1,
 				     0, 
-				     1*burnFactor));
+				     1*speed));
         	collidableTimer.rootTime = System.currentTimeMillis();
     	}
     	
@@ -168,6 +174,8 @@ public class SimpleTest extends BasicGame {
         	// Initialize game state
             app 				= new AppGameContainer(new SimpleTest());
         	app.setDisplayMode(GlobalConfig.GAME_WIDTH, GlobalConfig.GAME_HEIGHT, false);
+        	app.setTargetFrameRate(900);
+        	
         	player 				= new MockPlayer(app.getWidth()/2, app.getHeight()/2);
         	controller 			= new PlayerInputController( app.getWidth(), app.getHeight());
         	currentState 		=  GameState.IN_FLIGHT;
@@ -175,8 +183,8 @@ public class SimpleTest extends BasicGame {
         	worldProjectiles 	= new WorldProjectiles();
         	enemyObjects 		= new EnemyObjects();
         	collidableObjects 	= new CollidableObjects();
-
-        	System.out.println(app.getWidth()+"   "+app.getHeight());
+        	ws 					= new WorldStreamer();
+        	ws.backgrounds.add(new Background(0, -1));
         	
             app.setTitle("Divergent Pancakes v0.0.1");
         	
@@ -210,7 +218,9 @@ public class SimpleTest extends BasicGame {
     }
     
     private void renderBackground(Graphics g) throws SlickException {
-    	gMarshal.background.draw(0, 0);
+    	for(Background bg : ws.backgrounds) {
+    		gMarshal.background.draw(bg.x, bg.y);
+    	}
     }
     
     private void renderPlayer(Graphics g) throws SlickException {
@@ -255,6 +265,7 @@ public class SimpleTest extends BasicGame {
         g.drawString("DistanceTravelled: "+distanceTravelled, 25, 115);
         g.drawString("DebugMode (h)", 25, 130);
         g.drawString("Reset Player (r)", 25, 145);
+        g.drawString("BackgroundCount: "+ws.backgrounds.size(), 25, 160);
     }
     
     private void renderBoundingBoxes(Graphics g) {
