@@ -1,3 +1,5 @@
 Asset for lean left and lean right need work. Better transform and better shading.
 
 -- Shooting lighting on ship and muzzle flash.
+
+Modify jet flames based on direction of travel
