@@ -31,7 +31,7 @@ public class WorldObjects {
 			}
 			
 			if(worldObject.hasPassedOrigin && !worldObject.hasFollowingWall) {
-				insertionSet.add(new WorldObject(worldObject.x, -GlobalConfig.GAME_HEIGHT + worldObject.y-3));
+				insertionSet.add(new WorldObject(worldObject.x, -544 + worldObject.y-3));
 				worldObject.hasFollowingWall = true;
 			}
 		}

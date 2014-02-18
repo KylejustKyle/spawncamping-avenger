@@ -1,12 +1,11 @@
 package org.prototype.utility;
+import org.prototype.globals.GlobalConfig;
 import org.prototype.projectiles.Projectile;
 import org.prototype.world.entities.Background;
 import org.prototype.world.entities.CollidableObject;
 import org.prototype.world.entities.WorldObject;
 
 public class ObjectTrackerUtility {
-	private static int WIDTH = 960;
-	private static int HEIGHT = 544;
 	
 	// @TODO a lot of class heirarchy can go here to help make this more autowired.
 	public static boolean isOutsideOfWindow(WorldObject object) {
@@ -26,9 +25,9 @@ public class ObjectTrackerUtility {
 	}
 	
 	private static boolean isOutsideOfWindow(float x, float y) {
-		if(x < 0 || x >WIDTH) {
+		if(x < 0 || x >GlobalConfig.GAME_WIDTH) {
 			return true;
-		} else if( y < 0 || y > HEIGHT) {
+		} else if( y < 0 || y > GlobalConfig.GAME_HEIGHT) {
 			return true;
 		} else {
 			return false;
@@ -36,7 +35,7 @@ public class ObjectTrackerUtility {
 	}
 	
 	private static boolean isLeavingBottom(float x, float y) {
-		if(y > HEIGHT) {
+		if(y > GlobalConfig.GAME_HEIGHT) {
 			return true;
 		} else {
 			return false;

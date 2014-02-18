@@ -2,10 +2,13 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Point;
+import org.prototype.events.Event;
 import org.prototype.globals.GlobalConfig;
 import org.prototype.marshal.CollisionMarshal;
+import org.prototype.marshal.EventMarshal;
 import org.prototype.marshal.GraphicsMarshal;
 import org.prototype.player.MockPlayer;
 import org.prototype.projectiles.Projectile;
@@ -13,13 +16,13 @@ import org.prototype.projectiles.WorldProjectiles;
 import org.prototype.utility.IntervalTimer;
 import org.prototype.utility.SpawnerUtility;
 import org.prototype.world.entities.Background;
+import org.prototype.world.entities.BackgroundObjects;
 import org.prototype.world.entities.CollidableObject;
 import org.prototype.world.entities.CollidableObjects;
 import org.prototype.world.entities.EnemyObject;
 import org.prototype.world.entities.EnemyObjects;
 import org.prototype.world.entities.WorldObject;
 import org.prototype.world.entities.WorldObjects;
-import org.prototype.world.streamer.WorldStreamer;
 
 public class SimpleTest extends BasicGame {
 
@@ -40,6 +43,7 @@ public class SimpleTest extends BasicGame {
 	 */
 	private static GraphicsMarshal gMarshal;
 	private static CollisionMarshal cMarshal;
+	private static EventMarshal	eMarshal;
 	
 	/*
 	 * World Containers
@@ -48,7 +52,7 @@ public class SimpleTest extends BasicGame {
 	private static CollidableObjects collidableObjects = null;
 	private static WorldProjectiles worldProjectiles = null;
 	private static EnemyObjects enemyObjects = null;
-	private static WorldStreamer ws = null;
+	private static BackgroundObjects backgroundObjects = null;
 	
 	private static IntervalTimer spawnTimer;
 	private static IntervalTimer distanceTimer;
@@ -69,12 +73,15 @@ public class SimpleTest extends BasicGame {
     	
     	app.getInput().disableKeyRepeat();
     	gMarshal = new GraphicsMarshal();
+    	eMarshal = new EventMarshal(collidableObjects, enemyObjects);
     	cMarshal = new CollisionMarshal(collidableObjects, enemyObjects, worldProjectiles, player);
 		worldObjects.wObjects.add(new WorldObject(0, -GlobalConfig.GAME_HEIGHT));
 		worldObjects.wObjects.add(new WorldObject(GlobalConfig.GAME_WIDTH-20, -GlobalConfig.GAME_HEIGHT));
+		initializeTestEvents();
 		
-		//Music openingMenuMusic = new Music("resources/23_-_bloody_battle.ogg");
-		//openingMenuMusic.loop();
+		
+		Music openingMenuMusic = new Music("resources/23_-_bloody_battle.ogg");
+		openingMenuMusic.loop();
     }
 
     // This is called on tick, in GameContainer.java updateAndRender
@@ -88,38 +95,38 @@ public class SimpleTest extends BasicGame {
     	collidableObjects.updateObjects();
     	enemyObjects.updateObects();
     	worldProjectiles.updateProjectiles();
-    	ws.updateBackgrounds(burnFactor);
-    	
+    	backgroundObjects.updateBackgrounds(burnFactor);
+    	eMarshal.updateEvents(distanceTravelled);
     	cMarshal.runCollision(gMarshal);
     	
     	distanceTravelled += (((System.currentTimeMillis()-distanceTimer.rootTime)/1000.0)*burnFactor);
     	distanceTimer.rootTime = System.currentTimeMillis();
     	
-    	if(enemyTimer.isInterval()) {
-    		enemyObjects.eObjects.add(
-    				new EnemyObject(SpawnerUtility.generateConstrainedPoint(0, 200, 0, GlobalConfig.GAME_WIDTH),
-    								50,
-    								50,
-    								1,
-    								0,
-    								1,
-    								0));
-    		enemyTimer.rootTime = System.currentTimeMillis();
-    	}
-    	
-    	//@TODO hack fix, address this
-    	int speed = (burnFactor > 0 ? burnFactor : 1);
-    	
-    	if(collidableTimer.isInterval()) {
-        	collidableObjects.cObjects.add(new CollidableObject(SpawnerUtility.generateConstrainedPoint(0, 1, 0, GlobalConfig.GAME_WIDTH),
-				     50,
-				     50, 
-				     0, 
-				     1,
-				     0, 
-				     1*speed));
-        	collidableTimer.rootTime = System.currentTimeMillis();
-    	}
+//    	if(enemyTimer.isInterval()) {
+//    		enemyObjects.eObjects.add(
+//    				new EnemyObject(SpawnerUtility.generateConstrainedPoint(0, 200, 0, GlobalConfig.GAME_WIDTH),
+//    								50,
+//    								50,
+//    								1,
+//    								0,
+//    								1,
+//    								0));
+//    		enemyTimer.rootTime = System.currentTimeMillis();
+//    	}
+//    	
+//    	//@TODO hack fix, address this
+//    	int speed = (burnFactor > 0 ? burnFactor : 1);
+//    	
+//    	if(collidableTimer.isInterval()) {
+//        	collidableObjects.cObjects.add(new CollidableObject(SpawnerUtility.generateConstrainedPoint(0, 1, 0, GlobalConfig.GAME_WIDTH),
+//				     50,
+//				     50, 
+//				     0, 
+//				     1,
+//				     0, 
+//				     1*speed));
+//        	collidableTimer.rootTime = System.currentTimeMillis();
+//    	}
     	
     	// Player ship died, run death routine
     	if(player.shouldExplode) {
@@ -174,7 +181,7 @@ public class SimpleTest extends BasicGame {
         	// Initialize game state
             app 				= new AppGameContainer(new SimpleTest());
         	app.setDisplayMode(GlobalConfig.GAME_WIDTH, GlobalConfig.GAME_HEIGHT, false);
-        	app.setTargetFrameRate(900);
+        	app.setTargetFrameRate(400);
         	
         	player 				= new MockPlayer(app.getWidth()/2, app.getHeight()/2);
         	controller 			= new PlayerInputController( app.getWidth(), app.getHeight());
@@ -183,8 +190,8 @@ public class SimpleTest extends BasicGame {
         	worldProjectiles 	= new WorldProjectiles();
         	enemyObjects 		= new EnemyObjects();
         	collidableObjects 	= new CollidableObjects();
-        	ws 					= new WorldStreamer();
-        	ws.backgrounds.add(new Background(0, -1));
+        	backgroundObjects 	= new BackgroundObjects();
+        	backgroundObjects.bObjects.add(new Background(0, -1));
         	
             app.setTitle("Divergent Pancakes v0.0.1");
         	
@@ -218,7 +225,7 @@ public class SimpleTest extends BasicGame {
     }
     
     private void renderBackground(Graphics g) throws SlickException {
-    	for(Background bg : ws.backgrounds) {
+    	for(Background bg : backgroundObjects.bObjects) {
     		gMarshal.background.draw(bg.x, bg.y);
     	}
     }
@@ -265,7 +272,7 @@ public class SimpleTest extends BasicGame {
         g.drawString("DistanceTravelled: "+distanceTravelled, 25, 115);
         g.drawString("DebugMode (h)", 25, 130);
         g.drawString("Reset Player (r)", 25, 145);
-        g.drawString("BackgroundCount: "+ws.backgrounds.size(), 25, 160);
+        g.drawString("BackgroundCount: "+backgroundObjects.bObjects.size(), 25, 160);
     }
     
     private void renderBoundingBoxes(Graphics g) {
@@ -282,5 +289,26 @@ public class SimpleTest extends BasicGame {
     	for(Projectile projectile : worldProjectiles.wProjectiles) {
     		g.draw(projectile.boundingBox);
     	}
+    }
+    
+    private void initializeTestEvents() {
+    	Event newEvent = new Event(11);
+    	newEvent.addCollidable(SpawnerUtility.generateVerticalCollidable());
+    	newEvent.addCollidable(SpawnerUtility.generateVerticalCollidable());
+    	newEvent.addCollidable(SpawnerUtility.generateVerticalCollidable());
+    	newEvent.addEnemy(SpawnerUtility.generateHorizontalEnemy());
+    	newEvent.addEnemy(SpawnerUtility.generateHorizontalEnemy());
+    	newEvent.addEnemy(SpawnerUtility.generateHorizontalEnemy());
+    	
+    	Event newEvent2 = new Event(20);
+    	newEvent2.addCollidable(SpawnerUtility.generateVerticalCollidable());
+    	newEvent2.addCollidable(SpawnerUtility.generateVerticalCollidable());
+    	newEvent2.addCollidable(SpawnerUtility.generateVerticalCollidable());
+    	newEvent2.addEnemy(SpawnerUtility.generateHorizontalEnemy());
+    	newEvent2.addEnemy(SpawnerUtility.generateHorizontalEnemy());
+    	newEvent2.addEnemy(SpawnerUtility.generateHorizontalEnemy());
+    	
+    	eMarshal.pushEvent(newEvent);
+    	eMarshal.pushEvent(newEvent2);
     }
 }
