@@ -1,3 +1,7 @@
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
@@ -23,6 +27,7 @@ import org.prototype.world.entities.EnemyObject;
 import org.prototype.world.entities.EnemyObjects;
 import org.prototype.world.entities.WorldObject;
 import org.prototype.world.entities.WorldObjects;
+import org.xml.sax.SAXException;
 
 public class SimpleTest extends BasicGame {
 
@@ -57,7 +62,6 @@ public class SimpleTest extends BasicGame {
 	private static IntervalTimer spawnTimer;
 	private static IntervalTimer distanceTimer;
 	private static IntervalTimer enemyTimer;
-	private static IntervalTimer collidableTimer;
 	
     public SimpleTest() {
         super("SimpleTest");
@@ -69,7 +73,6 @@ public class SimpleTest extends BasicGame {
     	spawnTimer = new IntervalTimer(1000);
     	distanceTimer = new IntervalTimer(1000);
     	enemyTimer = new IntervalTimer(5000);
-    	collidableTimer = new IntervalTimer(1400);
     	
     	app.getInput().disableKeyRepeat();
     	gMarshal = new GraphicsMarshal();
@@ -78,7 +81,18 @@ public class SimpleTest extends BasicGame {
 		worldObjects.wObjects.add(new WorldObject(0, -GlobalConfig.GAME_HEIGHT));
 		worldObjects.wObjects.add(new WorldObject(GlobalConfig.GAME_WIDTH-20, -GlobalConfig.GAME_HEIGHT));
 		initializeTestEvents();
-		
+		try {
+			LevelParser nParser = new LevelParser("resources/levels/test_level.xml");
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		Music openingMenuMusic = new Music("resources/23_-_bloody_battle.ogg");
 		openingMenuMusic.loop();
