@@ -23,6 +23,7 @@ public class GraphicsMarshal {
 	public Image playerBasicProjectile;
 	public Image testEnemy;
 	public Image background;
+	public Image burnerTrail;
 	
 	public Animation jetAfterburnerTier1;
 	public Animation jetAfterburnerTier2;
@@ -36,6 +37,7 @@ public class GraphicsMarshal {
 	private Stack<Point> queuedAnimationCoordinates;
 	private Stack<Image> queuedImages;
 	private Stack<Point> queuedImageCoordinates;
+
 	
 	public GraphicsMarshal () {
 		playerShip = new  Hashtable<ShipVector, Image>();
@@ -54,7 +56,7 @@ public class GraphicsMarshal {
 			testCollidable = new Image("resources/Collidable.png");
 			testEnemy = new Image("resources/enemy.png");
 			playerBasicProjectile = new Image("resources/Projectile_Small.png");
-
+			burnerTrail = new Image("resources/testTrail.png");
 	    	Image[] aferburnerAnimT1 = {new Image("resources/Afterburner_1.png"), new Image("resources/Afterburner_2.png")};
 	    	jetAfterburnerTier1 = new Animation(aferburnerAnimT1, 150);
 	    	Image[] aferburnerAnimT2 = {new Image("resources/Afterburner_1_T2.png"), new Image("resources/Afterburner_2_T2.png")};
@@ -116,6 +118,10 @@ public class GraphicsMarshal {
 		}
 		anim.setLooping(false);
 		return anim;
+	}
+	
+	public Image getBurnerTrail() {
+		return burnerTrail;
 	}
 	
 	public Image getPlayerShipGraphic(ShipVector vector) {

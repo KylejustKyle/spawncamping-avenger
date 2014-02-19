@@ -4,11 +4,15 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.fills.GradientFill;
 import org.newdawn.slick.geom.Point;
+import org.newdawn.slick.geom.Rectangle;
 import org.prototype.events.Event;
 import org.prototype.globals.GlobalConfig;
 import org.prototype.marshal.CollisionMarshal;
@@ -116,32 +120,6 @@ public class SimpleTest extends BasicGame {
     	distanceTravelled += (((System.currentTimeMillis()-distanceTimer.rootTime)/1000.0)*burnFactor);
     	distanceTimer.rootTime = System.currentTimeMillis();
     	
-//    	if(enemyTimer.isInterval()) {
-//    		enemyObjects.eObjects.add(
-//    				new EnemyObject(SpawnerUtility.generateConstrainedPoint(0, 200, 0, GlobalConfig.GAME_WIDTH),
-//    								50,
-//    								50,
-//    								1,
-//    								0,
-//    								1,
-//    								0));
-//    		enemyTimer.rootTime = System.currentTimeMillis();
-//    	}
-//    	
-//    	//@TODO hack fix, address this
-//    	int speed = (burnFactor > 0 ? burnFactor : 1);
-//    	
-//    	if(collidableTimer.isInterval()) {
-//        	collidableObjects.cObjects.add(new CollidableObject(SpawnerUtility.generateConstrainedPoint(0, 1, 0, GlobalConfig.GAME_WIDTH),
-//				     50,
-//				     50, 
-//				     0, 
-//				     1,
-//				     0, 
-//				     1*speed));
-//        	collidableTimer.rootTime = System.currentTimeMillis();
-//    	}
-    	
     	// Player ship died, run death routine
     	if(player.shouldExplode) {
     		gMarshal.queueAnimation(gMarshal.createMediumExplosionAssets(), new Point(player.x, player.y));
@@ -169,7 +147,6 @@ public class SimpleTest extends BasicGame {
     public void keyPressed(int x, char b) {
     	if(player.isAlive) {
         	burnFactor = controller.boostControls(burnFactor);
-        	controller.fireControls(player, worldProjectiles);
     	}
     	
     	if(b == 'h') {
@@ -226,17 +203,20 @@ public class SimpleTest extends BasicGame {
     // This is called after update.
     @Override
     public void render(GameContainer container, Graphics g) throws SlickException {
+
     	renderBackground(g);
         renderPlayer(g);
         renderGraphicsMarshalQueues();
         renderObjects(g);
         renderProjectiles(g);
         renderDebugMenu(g);
-        
+
         if(isDebugMode) {
         	renderBoundingBoxes(g);
         }
     }
+    
+    // @TODO huge refactor here to remove all thius rendering code into a rendering marhsal
     
     private void renderBackground(Graphics g) throws SlickException {
     	for(Background bg : backgroundObjects.bObjects) {
@@ -246,6 +226,13 @@ public class SimpleTest extends BasicGame {
     
     private void renderPlayer(Graphics g) throws SlickException {
     	if(player.isAlive) {
+    		float alpha = 1f;
+    		for(Point trailNode : player.burnerTrail) {
+    			gMarshal.getBurnerTrail().setAlpha(alpha);
+    			gMarshal.getBurnerTrail().draw(trailNode.getX(), trailNode.getY());
+    			alpha = alpha - 0.01f;
+    		}
+    		
     		gMarshal.getPlayerShipGraphic(player.vector).draw(player.x, player.y);
     		gMarshal.getPlayerAfterburner(burnFactor).draw(player.x, player.y);
     	} else {
@@ -287,6 +274,7 @@ public class SimpleTest extends BasicGame {
         g.drawString("DebugMode (h)", 25, 130);
         g.drawString("Reset Player (r)", 25, 145);
         g.drawString("BackgroundCount: "+backgroundObjects.bObjects.size(), 25, 160);
+        g.drawString("BurnerTrailCount: "+player.burnerTrail.size(), 25, 175);
     }
     
     private void renderBoundingBoxes(Graphics g) {

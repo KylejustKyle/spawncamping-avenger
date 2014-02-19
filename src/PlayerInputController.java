@@ -1,4 +1,5 @@
 import org.lwjgl.input.Keyboard;
+import org.newdawn.slick.geom.Point;
 import org.prototype.player.MockPlayer;
 import org.prototype.player.ShipVector;
 import org.prototype.projectiles.VerticalProjectile;
@@ -46,18 +47,15 @@ public class PlayerInputController {
 		return burnFactor;
 	}
 	
-	public void fireControls(MockPlayer player, WorldProjectiles wProjectiles) {
-//		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-//			//Projectile factory should be used here instead.
-//			wProjectiles.wProjectiles.add(new VerticalProjectile(1, 1, player.x+player.middle, player.y, 10, 10));
-//		}
-	}
-	
 	private void consumeInFlightInput(MockPlayer player, int delta, WorldProjectiles wProjectiles) {
 		//We don't want to run this consuming flight control logic if the player is dead.
 		if(!player.isAlive) {
 			return;
 		}
+		
+		// @TODO this is used in the burner trail, remove this if we refactor this code to no longer contain that logic.
+		int currentX = player.x;
+		int currentY = player.y;
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
 			//Projectile factory should be used here instead.
@@ -91,6 +89,19 @@ public class PlayerInputController {
         
         player.boundingBox.setX(player.x);
         player.boundingBox.setY(player.y);
+        
+        //@TODO This should not go in here as it's not controller related. This should be a call on the player object
+        if(currentX != player.x || currentY != player.y) {
+        	// @TODO Introduce some variability in the points so it looks like nice dynamic noise,
+        	// not just a straight line
+        	player.addBurnerTrail(new Point(player.x+15 , player.y + player.height-20));
+        	player.addBurnerTrail(new Point(player.x + (player.width-18), player.y + player.height-20));
+        } else {
+        	if(!player.burnerTrail.isEmpty()) {
+        		player.burnerTrail.removeLast();
+        		
+        	}
+        }
 	}
 	
 	private void consumeInMenuInput() {
