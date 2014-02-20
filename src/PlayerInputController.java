@@ -54,8 +54,7 @@ public class PlayerInputController {
 		}
 		
 		// @TODO this is used in the burner trail, remove this if we refactor this code to no longer contain that logic.
-		int currentX = player.x;
-		int currentY = player.y;
+		player.previousPoint = new Point(player.x, player.y);
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
 			//Projectile factory should be used here instead.
@@ -90,18 +89,6 @@ public class PlayerInputController {
         player.boundingBox.setX(player.x);
         player.boundingBox.setY(player.y);
         
-        //@TODO This should not go in here as it's not controller related. This should be a call on the player object
-        if(currentX != player.x || currentY != player.y) {
-        	// @TODO Introduce some variability in the points so it looks like nice dynamic noise,
-        	// not just a straight line
-        	player.addBurnerTrail(new Point(player.x+15 , player.y + player.height-20));
-        	player.addBurnerTrail(new Point(player.x + (player.width-18), player.y + player.height-20));
-        } else {
-        	if(!player.burnerTrail.isEmpty()) {
-        		player.burnerTrail.removeLast();
-        		
-        	}
-        }
 	}
 	
 	private void consumeInMenuInput() {

@@ -21,6 +21,7 @@ public class MockPlayer {
 	public boolean isAlive;
 	public boolean shouldExplode;
 	public LinkedList<Point> burnerTrail;
+	public Point previousPoint;
 	
 	
 	public MockPlayer(int startX, int startY) throws SlickException {
@@ -32,11 +33,11 @@ public class MockPlayer {
 		middle = width/2;
 		vector = ShipVector.CENTER;
 		isAlive = true;
+		
 		// @TODO this is definitely a hack; need a better solution to message pass events for queue.
 		shouldExplode = false;
 		burnerTrail = new LinkedList<Point>();
 	}
-
 
 	public void addBurnerTrail(Point point) {
 		if(burnerTrail.size() == TRAIL_QUEUE_SIZE) {
@@ -44,5 +45,20 @@ public class MockPlayer {
 		}
 		
 		burnerTrail.push(point);
+	}
+	
+	public void updateBlurTrail() {
+        //@TODO This should not go in here as it's not controller related. This should be a call on the player object
+        if(this.previousPoint.getX() != this.x || this.y != this.previousPoint.getY()) {
+        	// @TODO Introduce some variability in the points so it looks like nice dynamic noise,
+        	// not just a straight line
+        	addBurnerTrail(new Point(this.x+15 , this.y + this.height-20));
+        	addBurnerTrail(new Point(this.x + (this.width-18), this.y + this.height-20));
+        } else {
+        	if(!burnerTrail.isEmpty()) {
+        		burnerTrail.removeLast();
+        		
+        	}
+        }
 	}
 }

@@ -107,8 +107,8 @@ public class SimpleTest extends BasicGame {
     @Override
     public void update(GameContainer container, int delta)
             throws SlickException {
-    	
     	currentState = controller.consumeInput(player, currentState, delta, worldProjectiles);
+    	player.updateBlurTrail();
     	worldObjects.updateObjects(burnFactor, app.getHeight());
     	collidableObjects.updateObjects();
     	enemyObjects.updateObects();
@@ -210,7 +210,7 @@ public class SimpleTest extends BasicGame {
         renderObjects(g);
         renderProjectiles(g);
         renderDebugMenu(g);
-
+        renderEnemyDebug(g);
         if(isDebugMode) {
         	renderBoundingBoxes(g);
         }
@@ -232,7 +232,6 @@ public class SimpleTest extends BasicGame {
     			gMarshal.getBurnerTrail().draw(trailNode.getX(), trailNode.getY());
     			alpha = alpha - 0.01f;
     		}
-    		
     		gMarshal.getPlayerShipGraphic(player.vector).draw(player.x, player.y);
     		gMarshal.getPlayerAfterburner(burnFactor).draw(player.x, player.y);
     	} else {
@@ -255,12 +254,25 @@ public class SimpleTest extends BasicGame {
     	
     	for(EnemyObject enemyObject : enemyObjects.eObjects) {
     		gMarshal.getTestEnemyGraphic().draw(enemyObject.x, enemyObject.y);
+    		float alpha = 1.0f;
+    		
+    		for(Point trailNode : enemyObject.burnerTrail) {
+    			gMarshal.getBurnerTrail().setAlpha(alpha);
+    			gMarshal.getBurnerTrail().draw(trailNode.getX(), trailNode.getY());
+    			alpha = alpha - 0.01f;
+    		}
     	}
     }
     
     private void renderProjectiles(Graphics g) throws SlickException {
     	for(Projectile projectile : worldProjectiles.wProjectiles) {
     		gMarshal.getPlayerProjectile().draw(projectile.x, projectile.y);
+    	}
+    }
+    
+    private void renderEnemyDebug(Graphics g) {
+    	for(EnemyObject enemy : enemyObjects.eObjects) {
+    		g.drawString("TrailCollectionSize: "+enemy.burnerTrail.size(), enemy.x, enemy.y);
     	}
     }
     
