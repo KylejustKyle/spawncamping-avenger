@@ -210,8 +210,9 @@ public class SimpleTest extends BasicGame {
         renderObjects(g);
         renderProjectiles(g);
         renderDebugMenu(g);
-        renderEnemyDebug(g);
+        
         if(isDebugMode) {
+            renderEnemyDebug(g);
         	renderBoundingBoxes(g);
         }
     }
