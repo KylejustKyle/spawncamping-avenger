@@ -16,9 +16,11 @@ public class CollidableObject extends WorldObject {
 	
 	// @TODO we need to change the way which we pass in the vector & velocity maps, should be a helper object that reduces the 
 	// long parameter list smell
-	public CollidableObject(Point position, float width, float height, float xAxisVector, float yAxisVector, float xVelocity, float yVelocity) {
+	public CollidableObject(Point position, float newWidth, float newHeight, float xAxisVector, float yAxisVector, float xVelocity, float yVelocity) {
 		super(position.getX(), position.getY());
-		boundingBox = new Rectangle(position.getX(), position.getY(), width, height);
+		boundingBox = new Rectangle(position.getX(), position.getY(), newWidth, newHeight);
+		this.width = newWidth;
+		this.height = newHeight;
 		this.xAxisVector = xAxisVector;
 		this.yAxisVector = yAxisVector;
 		this.xVelocity = xVelocity;
