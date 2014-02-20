@@ -46,10 +46,14 @@ public class EnemyObject extends CollidableObject {
         	float burnerY = (this.y);
         	
         	Random randomGen = new Random();
-        	burnerX *= 1*randomGen.nextFloat();
-        	burnerY *= 1*randomGen.nextFloat();
+        	float expansionX = randomGen.nextInt(3);
+        	float expansionY = randomGen.nextInt(3);
+        	int direction = randomGen.nextInt(1) == 0 ? 1 : -1; 
         	
-        	addBurnerTrail(new Point(burnerX, burnerY));
+        	burnerX += direction*expansionX;
+        	burnerY += direction*expansionY;
+        	
+        	addBurnerTrail(new Point(burnerX+10, burnerY));
         } else {
         	if(!burnerTrail.isEmpty()) {
         		burnerTrail.removeLast();
