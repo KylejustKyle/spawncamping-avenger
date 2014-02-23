@@ -14,14 +14,16 @@ import org.prototype.world.entities.EnemyObjects;
 public class CollisionMarshal {
 	public MockPlayer player;
 	public CollidableObjects collidableObjects;
-	public WorldProjectiles worldProjectiles;
+	public WorldProjectiles playerProjectiles;
+	public WorldProjectiles enemyProjectiles;
 	public EnemyObjects enemyObjects;
 	
-	public CollisionMarshal(CollidableObjects newCollidableObjects, EnemyObjects newEnemyObjects, WorldProjectiles newWorldProjectiles, MockPlayer newPlayer) {
+	public CollisionMarshal(CollidableObjects newCollidableObjects, WorldProjectiles newEnemyProjectiles, EnemyObjects newEnemyObjects, WorldProjectiles newWorldProjectiles, MockPlayer newPlayer) {
 		player 				= newPlayer;
 		collidableObjects 	= newCollidableObjects;
 		enemyObjects 		= newEnemyObjects;
-		worldProjectiles 	= newWorldProjectiles;
+		playerProjectiles 	= newWorldProjectiles;
+		enemyProjectiles 	= newEnemyProjectiles;
 	}
 	
 	public void runCollision(GraphicsMarshal gMarshal) {
@@ -29,6 +31,14 @@ public class CollisionMarshal {
 			// Check to see if the player has collided with world hazards
 			for(CollidableObject collidableObject : collidableObjects.cObjects) {
 				if(collidableObject.boundingBox.intersects(player.boundingBox)) {
+					player.isAlive = false;
+					player.shouldExplode = true;
+					break;
+				}
+			}
+			
+			for(Projectile projectile : enemyProjectiles.wProjectiles) {
+				if(projectile.boundingBox.intersects(player.boundingBox)) {
 					player.isAlive = false;
 					player.shouldExplode = true;
 					break;
@@ -46,17 +56,21 @@ public class CollisionMarshal {
 		}
 		
 		// @TODO this will definitely need an algorithm check
-		ArrayList<EnemyObject> removalSet = new ArrayList<EnemyObject>();
-		for(Projectile projectile : worldProjectiles.wProjectiles) {
+		ArrayList<EnemyObject> enemyRemovalSet = new ArrayList<EnemyObject>();
+		ArrayList<Projectile> projectileRemovalSet = new ArrayList<Projectile>();
+		
+		for(Projectile projectile : playerProjectiles.wProjectiles) {
 			for(EnemyObject enemyObject : enemyObjects.eObjects) {
 				if(projectile.boundingBox.intersects(enemyObject.boundingBox)) {
-					removalSet.add(enemyObject);
+					enemyRemovalSet.add(enemyObject);
+					projectileRemovalSet.add(projectile);
 					enemyObject.isAlive = false;
 					gMarshal.queueAnimation(gMarshal.createExplosionAssets(), new Point(enemyObject.x, enemyObject.y));
 				}
 			}
 		}
 		
-		enemyObjects.eObjects.removeAll(removalSet);
+		playerProjectiles.wProjectiles.removeAll(projectileRemovalSet);
+		enemyObjects.eObjects.removeAll(enemyRemovalSet);
 	}
 }

@@ -59,7 +59,8 @@ public class SimpleTest extends BasicGame {
 	 */
 	private static WorldObjects worldObjects = null;
 	private static CollidableObjects collidableObjects = null;
-	private static WorldProjectiles worldProjectiles = null;
+	private static WorldProjectiles playerProjectiles = null;
+	private static WorldProjectiles enemyProjectiles = null;
 	private static EnemyObjects enemyObjects = null;
 	private static BackgroundObjects backgroundObjects = null;
 	
@@ -81,10 +82,11 @@ public class SimpleTest extends BasicGame {
     	app.getInput().disableKeyRepeat();
     	gMarshal = new GraphicsMarshal();
     	eMarshal = new EventMarshal(collidableObjects, enemyObjects);
-    	cMarshal = new CollisionMarshal(collidableObjects, enemyObjects, worldProjectiles, player);
+    	cMarshal = new CollisionMarshal(collidableObjects, enemyProjectiles, enemyObjects, playerProjectiles, player);
 		worldObjects.wObjects.add(new WorldObject(0, -GlobalConfig.GAME_HEIGHT));
 		worldObjects.wObjects.add(new WorldObject(GlobalConfig.GAME_WIDTH-20, -GlobalConfig.GAME_HEIGHT));
 		initializeTestEvents();
+		
 		try {
 			LevelParser nParser = new LevelParser("resources/levels/test_level.xml");
 		} catch (SAXException e) {
@@ -98,8 +100,8 @@ public class SimpleTest extends BasicGame {
 			e.printStackTrace();
 		}
 		
-		Music openingMenuMusic = new Music("resources/23_-_bloody_battle.ogg");
-		openingMenuMusic.loop();
+//		Music openingMenuMusic = new Music("resources/23_-_bloody_battle.ogg");
+//		openingMenuMusic.loop();
     }
 
     // This is called on tick, in GameContainer.java updateAndRender
@@ -107,12 +109,13 @@ public class SimpleTest extends BasicGame {
     @Override
     public void update(GameContainer container, int delta)
             throws SlickException {
-    	currentState = controller.consumeInput(player, currentState, delta, worldProjectiles);
+    	currentState = controller.consumeInput(player, currentState, delta, playerProjectiles);
     	player.updateBlurTrail();
     	worldObjects.updateObjects(burnFactor, app.getHeight());
     	collidableObjects.updateObjects();
-    	enemyObjects.updateObects();
-    	worldProjectiles.updateProjectiles();
+    	enemyObjects.updateObects(enemyProjectiles);
+    	playerProjectiles.updateProjectiles();
+    	enemyProjectiles.updateProjectiles();
     	backgroundObjects.updateBackgrounds(burnFactor);
     	eMarshal.updateEvents(distanceTravelled);
     	cMarshal.runCollision(gMarshal);
@@ -178,7 +181,8 @@ public class SimpleTest extends BasicGame {
         	controller 			= new PlayerInputController( app.getWidth(), app.getHeight());
         	currentState 		=  GameState.IN_FLIGHT;
         	worldObjects 		= new WorldObjects();
-        	worldProjectiles 	= new WorldProjectiles();
+        	playerProjectiles 	= new WorldProjectiles();
+        	enemyProjectiles 	= new WorldProjectiles();
         	enemyObjects 		= new EnemyObjects();
         	collidableObjects 	= new CollidableObjects();
         	backgroundObjects 	= new BackgroundObjects();
@@ -204,7 +208,7 @@ public class SimpleTest extends BasicGame {
     @Override
     public void render(GameContainer container, Graphics g) throws SlickException {
 
-    	renderBackground(g);
+    	//renderBackground(g);
         renderPlayer(g);
         renderGraphicsMarshalQueues();
         renderObjects(g);
@@ -266,7 +270,11 @@ public class SimpleTest extends BasicGame {
     }
     
     private void renderProjectiles(Graphics g) throws SlickException {
-    	for(Projectile projectile : worldProjectiles.wProjectiles) {
+    	for(Projectile projectile : playerProjectiles.wProjectiles) {
+    		gMarshal.getPlayerProjectile().draw(projectile.x, projectile.y);
+    	}
+    	
+    	for(Projectile projectile : enemyProjectiles.wProjectiles) {
     		gMarshal.getPlayerProjectile().draw(projectile.x, projectile.y);
     	}
     }
@@ -280,14 +288,15 @@ public class SimpleTest extends BasicGame {
     private void renderDebugMenu(Graphics g) {
         g.drawString("BurnFactor: "+burnFactor, 25, 40);
         g.drawString("WorldObjectCount: "+worldObjects.wObjects.size(), 25, 55);
-        g.drawString("WorldProjectileCount: "+worldProjectiles.wProjectiles.size(), 25, 70);
-        g.drawString("CollidableObjectCount: "+collidableObjects.cObjects.size(), 25, 85);
-        g.drawString("EnemyObjectCount: "+enemyObjects.eObjects.size(), 25, 100);
-        g.drawString("DistanceTravelled: "+distanceTravelled, 25, 115);
-        g.drawString("DebugMode (h)", 25, 130);
-        g.drawString("Reset Player (r)", 25, 145);
-        g.drawString("BackgroundCount: "+backgroundObjects.bObjects.size(), 25, 160);
-        g.drawString("BurnerTrailCount: "+player.burnerTrail.size(), 25, 175);
+        g.drawString("PlayerProjectileCount: "+playerProjectiles.wProjectiles.size(), 25, 70);
+        g.drawString("EnemyProjectileCount: "+enemyProjectiles.wProjectiles.size(), 25, 85);
+        g.drawString("CollidableObjectCount: "+collidableObjects.cObjects.size(), 25, 100);
+        g.drawString("EnemyObjectCount: "+enemyObjects.eObjects.size(), 25, 115);
+        g.drawString("DistanceTravelled: "+distanceTravelled, 25, 130);
+        g.drawString("DebugMode (h)", 25, 145);
+        g.drawString("Reset Player (r)", 25, 160);
+        g.drawString("BackgroundCount: "+backgroundObjects.bObjects.size(), 25, 175);
+        g.drawString("BurnerTrailCount: "+player.burnerTrail.size(), 25, 190);
     }
     
     private void renderBoundingBoxes(Graphics g) {
@@ -301,7 +310,11 @@ public class SimpleTest extends BasicGame {
     		g.draw(enemyObject.boundingBox);
     	}
     	
-    	for(Projectile projectile : worldProjectiles.wProjectiles) {
+    	for(Projectile projectile : playerProjectiles.wProjectiles) {
+    		g.draw(projectile.boundingBox);
+    	}
+    	
+    	for(Projectile projectile : enemyProjectiles.wProjectiles) {
     		g.draw(projectile.boundingBox);
     	}
     }

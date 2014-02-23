@@ -3,7 +3,7 @@ package org.prototype.projectiles;
 
 public class VerticalProjectile extends Projectile{
 
-	public VerticalProjectile(int newVelocity, int newTeam, int startingX, int startingY, int width, int height) {
+	public VerticalProjectile(int newVelocity, int newTeam, float startingX, float startingY, int width, int height) {
 		super(newVelocity, newTeam, startingX, startingY, width, height);
 	}
 

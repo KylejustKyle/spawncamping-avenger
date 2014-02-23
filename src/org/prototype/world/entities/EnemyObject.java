@@ -5,6 +5,9 @@ import java.util.Random;
 
 import org.newdawn.slick.geom.Point;
 import org.prototype.globals.GlobalConfig;
+import org.prototype.projectiles.VerticalProjectile;
+import org.prototype.projectiles.WorldProjectiles;
+import org.prototype.utility.IntervalTimer;
 
 public class EnemyObject extends CollidableObject {
 	//@TODO refactor the burnerTrail to be extracted into a super class
@@ -12,11 +15,13 @@ public class EnemyObject extends CollidableObject {
 	public LinkedList<Point> burnerTrail;
 	public static int TRAIL_QUEUE_SIZE = 80;
 	public Point previousPoint;
+	IntervalTimer fireTimer;
 	
 	public EnemyObject(Point point, float width, float height, float xAxisVector, float yAxisVector, float xVelocity, float yVelocity) {
 		super(point, width, height, xAxisVector, yAxisVector, xVelocity, yVelocity);
 		isAlive = true;
 		burnerTrail = new LinkedList<Point>();
+		fireTimer = new IntervalTimer(900);
 	}
 	
 	@Override
@@ -53,11 +58,21 @@ public class EnemyObject extends CollidableObject {
         	burnerX += direction*expansionX;
         	burnerY += direction*expansionY;
         	
-        	addBurnerTrail(new Point(burnerX+10, burnerY));
+        	addBurnerTrail(new Point(burnerX-2, burnerY+15));
         } else {
         	if(!burnerTrail.isEmpty()) {
         		burnerTrail.removeLast();
         	}
         }
+	}
+	
+	/**
+	 * This is the fire method. Here we should define different fire types and patterns.
+	 */
+	public void shoot(WorldProjectiles wProjectiles) {
+		if(fireTimer.isInterval()) {
+			wProjectiles.wProjectiles.add(new VerticalProjectile(1, 0, this.boundingBox.getCenterX(), this.boundingBox.getY(), 10, 10));
+			fireTimer.rootTime = System.currentTimeMillis();
+		}
 	}
 }
