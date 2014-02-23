@@ -18,6 +18,7 @@ import org.prototype.globals.GlobalConfig;
 import org.prototype.marshal.CollisionMarshal;
 import org.prototype.marshal.EventMarshal;
 import org.prototype.marshal.GraphicsMarshal;
+import org.prototype.math.FunctionType;
 import org.prototype.player.MockPlayer;
 import org.prototype.projectiles.Projectile;
 import org.prototype.projectiles.WorldProjectiles;
@@ -27,6 +28,7 @@ import org.prototype.world.entities.Background;
 import org.prototype.world.entities.BackgroundObjects;
 import org.prototype.world.entities.CollidableObject;
 import org.prototype.world.entities.CollidableObjects;
+import org.prototype.world.entities.EnemyFactory;
 import org.prototype.world.entities.EnemyObject;
 import org.prototype.world.entities.EnemyObjects;
 import org.prototype.world.entities.WorldObject;
@@ -122,6 +124,18 @@ public class SimpleTest extends BasicGame {
     	
     	distanceTravelled += (((System.currentTimeMillis()-distanceTimer.rootTime)/1000.0)*burnFactor);
     	distanceTimer.rootTime = System.currentTimeMillis();
+//    	
+//    	if(enemyTimer.isInterval()) {
+//    		enemyObjects.eObjects.add(
+//    				new EnemyObject(SpawnerUtility.generateConstrainedPoint(0, 200, 0, GlobalConfig.GAME_WIDTH),
+//    								50,
+//    								50,
+//    								1,
+//    								0,
+//    								1,
+//    								0));
+//    		enemyTimer.rootTime = System.currentTimeMillis();
+//    	}
     	
     	// Player ship died, run death routine
     	if(player.shouldExplode) {
@@ -320,23 +334,23 @@ public class SimpleTest extends BasicGame {
     }
     
     private void initializeTestEvents() {
-    	Event newEvent = new Event(11);
-    	newEvent.addCollidable(SpawnerUtility.generateVerticalCollidable());
-    	newEvent.addCollidable(SpawnerUtility.generateVerticalCollidable());
-    	newEvent.addCollidable(SpawnerUtility.generateVerticalCollidable());
-    	newEvent.addEnemy(SpawnerUtility.generateHorizontalEnemy());
-    	newEvent.addEnemy(SpawnerUtility.generateHorizontalEnemy());
-    	newEvent.addEnemy(SpawnerUtility.generateHorizontalEnemy());
     	
-    	Event newEvent2 = new Event(20);
-    	newEvent2.addCollidable(SpawnerUtility.generateVerticalCollidable());
-    	newEvent2.addCollidable(SpawnerUtility.generateVerticalCollidable());
-    	newEvent2.addCollidable(SpawnerUtility.generateVerticalCollidable());
-    	newEvent2.addEnemy(SpawnerUtility.generateHorizontalEnemy());
-    	newEvent2.addEnemy(SpawnerUtility.generateHorizontalEnemy());
-    	newEvent2.addEnemy(SpawnerUtility.generateHorizontalEnemy());
+    	EnemyObject enemyObject1 = EnemyFactory.createEnemy(new Point(0, 0), 50f, 50f, 1f, 0f, 1f, FunctionType.LINEAR);
+    	EnemyObject enemyObject2 = EnemyFactory.createEnemy(new Point(GlobalConfig.GAME_WIDTH, 0), 50f, 50f, 1f, 0f, 1f, FunctionType.REVERSE_LINEAR);
     	
-    	eMarshal.pushEvent(newEvent);
-    	eMarshal.pushEvent(newEvent2);
+    	Event newEvent = null;
+    	float timer = 6.0f;
+    	
+    	for(int i=0; i<10; i++) {
+    		newEvent = new Event(timer);
+    		newEvent.addEnemy(enemyObject1.clone());
+        	eMarshal.pushEvent(newEvent);
+        	timer += 0.5;
+        	
+        	newEvent = new Event(timer);
+        	newEvent.addEnemy(enemyObject2.clone());
+        	eMarshal.pushEvent(newEvent);
+        	timer += 0.5;
+    	}
     }
 }

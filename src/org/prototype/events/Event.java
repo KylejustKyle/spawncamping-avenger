@@ -7,13 +7,13 @@ import org.prototype.world.entities.CollidableObject;
 import org.prototype.world.entities.EnemyObject;
 
 public class Event {
-	public double eventTiming;
+	public float eventTiming;
 	public Point location;
 	public ArrayList<CollidableObject> collidableObjects;
 	public ArrayList<EnemyObject> enemyObjects;
 	
-	public Event(long newEventTiming) {
-		eventTiming = newEventTiming;
+	public Event(float f) {
+		eventTiming = f;
 		collidableObjects = new ArrayList<CollidableObject>();
 		enemyObjects = new ArrayList<EnemyObject>();
 	}

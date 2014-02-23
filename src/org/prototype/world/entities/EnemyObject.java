@@ -5,6 +5,9 @@ import java.util.Random;
 
 import org.newdawn.slick.geom.Point;
 import org.prototype.globals.GlobalConfig;
+import org.prototype.math.Function;
+import org.prototype.math.FunctionFactory;
+import org.prototype.math.FunctionType;
 import org.prototype.projectiles.VerticalProjectile;
 import org.prototype.projectiles.WorldProjectiles;
 import org.prototype.utility.IntervalTimer;
@@ -16,23 +19,31 @@ public class EnemyObject extends CollidableObject {
 	public static int TRAIL_QUEUE_SIZE = 80;
 	public Point previousPoint;
 	IntervalTimer fireTimer;
+	Function pathFunction;
 	
-	public EnemyObject(Point point, float width, float height, float xAxisVector, float yAxisVector, float xVelocity, float yVelocity) {
-		super(point, width, height, xAxisVector, yAxisVector, xVelocity, yVelocity);
+	public EnemyObject(Point point, float width, float height, float xAxisVector, float yAxisVector, float newVelocity, FunctionType pathType) {
+		super(point, width, height, xAxisVector, yAxisVector, newVelocity);
 		isAlive = true;
 		burnerTrail = new LinkedList<Point>();
 		fireTimer = new IntervalTimer(900);
+		pathFunction = FunctionFactory.createFunction(pathType);
+	}
+	
+	public EnemyObject clone() {
+		return new EnemyObject(new Point(this.x, this.y), width, height, xAxisVector, yAxisVector, velocity, pathFunction.getType());
 	}
 	
 	@Override
 	public void updateLocation() {
-		float locationX = xVelocity * xAxisVector;
+		float locationX = velocity * xAxisVector;
 		if((this.x+locationX) > GlobalConfig.GAME_WIDTH || (this.x+locationX) < 0 ) {
 			xAxisVector*= -1;
 		} else {
 			// @TODO we want to make this automatic - interface to update x or y would make the change in the bounding box.
 			this.x += locationX;
+			this.y =  pathFunction.compute(this.x);
 			this.boundingBox.setX(this.x);
+			this.boundingBox.setY(this.y);
 		}
 	}
 	

@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.newdawn.slick.geom.Point;
 import org.prototype.globals.GlobalConfig;
+import org.prototype.math.FunctionType;
 import org.prototype.world.entities.CollidableObject;
 import org.prototype.world.entities.EnemyObject;
 
@@ -19,13 +20,13 @@ public class SpawnerUtility {
 	}
 	
 	public static EnemyObject generateHorizontalEnemy() {
-		EnemyObject eObject = new EnemyObject(SpawnerUtility.generateConstrainedPoint(0, 200, 0, GlobalConfig.GAME_WIDTH),
+		EnemyObject eObject = new EnemyObject(SpawnerUtility.generateConstrainedPoint(0, 200, 0, 5),
 				50,
 				50,
 				1,
 				0,
 				1,
-				0);
+				FunctionType.LINEAR);
 		return eObject;
 	}
 	
@@ -35,7 +36,6 @@ public class SpawnerUtility {
 			     50, 
 			     0, 
 			     1,
-			     0, 
 			     1);
 		return cObject;
 	}
