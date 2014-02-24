@@ -19,10 +19,10 @@ public class MockPlayer {
 	public Animation idle;
 	public ShipVector vector;
 	public boolean isAlive;
+	public boolean isShooting;
 	public boolean shouldExplode;
 	public LinkedList<Point> burnerTrail;
 	public Point previousPoint;
-	
 	
 	public MockPlayer(int startX, int startY) throws SlickException {
 		x = startX;

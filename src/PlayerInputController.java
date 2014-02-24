@@ -17,7 +17,7 @@ public class PlayerInputController {
 	public PlayerInputController(int screenWidth, int screenHeight) {
 		this.screenHeight = screenHeight;
 		this.screenWidth = screenWidth;
-		inputTimer = new IntervalTimer(100);
+		inputTimer = new IntervalTimer(90);
 	}
 	
 	public GameState consumeInput(MockPlayer player, GameState currentState, int delta, WorldProjectiles wProjectiles) {
@@ -55,11 +55,13 @@ public class PlayerInputController {
 		
 		// @TODO this is used in the burner trail, remove this if we refactor this code to no longer contain that logic.
 		player.previousPoint = new Point(player.x, player.y);
+		player.isShooting = false;
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+			player.isShooting = true;
 			//Projectile factory should be used here instead.
 			if(inputTimer.isInterval()) {
-				wProjectiles.wProjectiles.add(new VerticalProjectile(1, 1, player.x+player.middle, player.y, 10, 10));
+				wProjectiles.wProjectiles.add(new VerticalProjectile(3, 1, player.x+player.middle-5, player.y, 10, 10));
 				inputTimer.rootTime = System.currentTimeMillis();
 			}
 		}

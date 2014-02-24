@@ -21,6 +21,7 @@ public class GraphicsMarshal {
 	public Image trackingWall;
 	public Image testCollidable;
 	public Image playerBasicProjectile;
+	public Image enemyBasicProjectile;
 	public Image testEnemy;
 	public Image background;
 	public Image burnerTrail;
@@ -28,6 +29,7 @@ public class GraphicsMarshal {
 	public Animation jetAfterburnerTier1;
 	public Animation jetAfterburnerTier2;
 	public Animation jetAfterburnerTier3;
+	public Animation playerMuzzleFlash;
 	public Animation explosion;
 	
 	private Hashtable<ShipVector, Image> playerShip;
@@ -55,7 +57,8 @@ public class GraphicsMarshal {
 			trackingWall = new Image("resources/Edge.png");
 			testCollidable = new Image("resources/Collidable.png");
 			testEnemy = new Image("resources/enemy2.png");
-			playerBasicProjectile = new Image("resources/Projectile_Small.png");
+			playerBasicProjectile = new Image("resources/playershot.png");
+			enemyBasicProjectile = new Image("resources/enemyshot.png");
 			burnerTrail = new Image("resources/testTrail.png");
 	    	Image[] aferburnerAnimT1 = {new Image("resources/Afterburner_1.png"), new Image("resources/Afterburner_2.png")};
 	    	jetAfterburnerTier1 = new Animation(aferburnerAnimT1, 150);
@@ -63,6 +66,9 @@ public class GraphicsMarshal {
 	    	jetAfterburnerTier2 = new Animation(aferburnerAnimT2, 150);
 	    	Image[] aferburnerAnimT3 = {new Image("resources/Afterburner_1_T3.png"), new Image("resources/Afterburner_2_T3.png")};
 	    	jetAfterburnerTier3 = new Animation(aferburnerAnimT3, 150);
+	    	
+	    	Image[] muzzleFlash = {new Image("resources/muzzle_1.png"), new Image("resources/muzzle_2.png"), new Image("resources/muzzle_3.png")};
+	    	playerMuzzleFlash = new Animation(muzzleFlash, 70);
 			
 			playerShip.put(ShipVector.LEFT, playerShipLeanLeft);
 			playerShip.put(ShipVector.RIGHT, playerShipLeanRight);
@@ -136,8 +142,16 @@ public class GraphicsMarshal {
 		return playerBasicProjectile;
 	}
 	
+	public Image getEnemyProjectile() {
+		return enemyBasicProjectile;
+	}
+	
 	public Animation getPlayerAfterburner(int burnFactor) {
 		return afterburner.get(AfterburnerType.values()[burnFactor]);
+	}
+	
+	public Animation getPlayerMuzzleFlash() {
+		return playerMuzzleFlash;
 	}
 	
 	public Image getTestCollidableGraphic() {

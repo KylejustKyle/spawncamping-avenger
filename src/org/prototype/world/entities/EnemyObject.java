@@ -66,10 +66,11 @@ public class EnemyObject extends CollidableObject {
         	float expansionY = randomGen.nextInt(3);
         	int direction = randomGen.nextInt(1) == 0 ? 1 : -1; 
         	
-        	burnerX += direction*expansionX;
-        	burnerY += direction*expansionY;
+        	burnerX += direction;
+        	burnerY += direction;
         	
-        	addBurnerTrail(new Point(burnerX-2, burnerY+15));
+        	addBurnerTrail(new Point(burnerX-18, burnerY+18));
+        	addBurnerTrail(new Point(burnerX+14, burnerY+18));
         } else {
         	if(!burnerTrail.isEmpty()) {
         		burnerTrail.removeLast();
@@ -82,7 +83,7 @@ public class EnemyObject extends CollidableObject {
 	 */
 	public void shoot(WorldProjectiles wProjectiles) {
 		if(fireTimer.isInterval()) {
-			wProjectiles.wProjectiles.add(new VerticalProjectile(1, 0, this.boundingBox.getCenterX(), this.boundingBox.getY(), 10, 10));
+			wProjectiles.wProjectiles.add(new VerticalProjectile(2, 0, this.boundingBox.getCenterX(), this.boundingBox.getY(), 10, 10));
 			fireTimer.rootTime = System.currentTimeMillis();
 		}
 	}

@@ -251,6 +251,11 @@ public class SimpleTest extends BasicGame {
     			gMarshal.getBurnerTrail().draw(trailNode.getX(), trailNode.getY());
     			alpha = alpha - 0.01f;
     		}
+    		
+    		if(player.isShooting) {
+    			gMarshal.getPlayerMuzzleFlash().draw(player.x, player.y-30);
+    		}
+    		
     		gMarshal.getPlayerShipGraphic(player.vector).draw(player.x, player.y);
     		gMarshal.getPlayerAfterburner(burnFactor).draw(player.x, player.y);
     	} else {
@@ -289,7 +294,7 @@ public class SimpleTest extends BasicGame {
     	}
     	
     	for(Projectile projectile : enemyProjectiles.wProjectiles) {
-    		gMarshal.getPlayerProjectile().draw(projectile.x, projectile.y);
+    		gMarshal.getEnemyProjectile().draw(projectile.x, projectile.y);
     	}
     }
     
@@ -334,7 +339,6 @@ public class SimpleTest extends BasicGame {
     }
     
     private void initializeTestEvents() {
-    	
     	EnemyObject enemyObject1 = EnemyFactory.createEnemy(new Point(0, 0), 50f, 50f, 1f, 0f, 1f, FunctionType.LINEAR);
     	EnemyObject enemyObject2 = EnemyFactory.createEnemy(new Point(GlobalConfig.GAME_WIDTH, 0), 50f, 50f, 1f, 0f, 1f, FunctionType.REVERSE_LINEAR);
     	
