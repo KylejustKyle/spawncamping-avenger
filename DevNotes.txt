@@ -1,3 +1,13 @@
 Asset for lean left and lean right need work. Better transform and better shading.
 
 -- Shooting lighting on ship and muzzle flash.
+
+spawn archetypes for level encoding
+
+sorting of event queue
+
+
+lower priority:
+Precise collision detection
+Redo bullet graphics
+Rounder jet trails
